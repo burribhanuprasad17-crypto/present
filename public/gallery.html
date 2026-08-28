@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Memory Garden For You 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="gallery-body">
+
+  <!-- ══════════ Layered blossom garden ══════════ -->
+  <div class="scene" aria-hidden="true">
+    <div class="layer" data-depth="0.15">
+      <div class="scene-glow glow-one"></div>
+      <div class="scene-glow glow-two"></div>
+      <div id="stars" class="stars layer"></div>
+      <div class="moon-v3"></div>
+    </div>
+    <div class="layer" data-depth="0.35">
+      <div id="treeline" class="treeline"></div>
+    </div>
+    <div id="branch-l" class="branch branch-left" data-depth="0.6"></div>
+    <div id="branch-r" class="branch branch-right" data-depth="0.5"></div>
+    <div class="grass"></div>
+    <div class="flowers-row" aria-hidden="true">
+      <span class="flower">🌸</span><span class="flower">🌷</span><span class="flower">🌸</span>
+      <span class="flower">🌼</span><span class="flower">🌸</span><span class="flower">🌷</span>
+      <span class="flower">🌸</span><span class="flower">🌼</span><span class="flower">🌸</span>
+    </div>
+    <div id="particles" class="particles layer"></div>
+    <div id="petals-layer" class="petals-layer layer"></div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- Music + nav -->
+  <button id="music-toggle" class="music-pill" aria-pressed="false" aria-label="Toggle background music">
+    <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    ♪ A Little Tune
+  </button>
+
+  <nav class="nav-v3" aria-label="Main navigation">
+    <a href="home.html#home-top">♡ Home</a>
+    <a href="#memories" class="active">🌸 Memories</a>
+    <a href="#love-letter">✦ Letter</a>
+  </nav>
+
+  <main id="memories" class="memory-garden">
+    <h1 class="garden-title shimmer-text">A Garden Of Beautiful Snaps ♥</h1>
+
+    <p class="garden-sub">Every picture holds a little piece of a moment.</p>
+
+    <div class="ornament" aria-hidden="true"><span>🌸</span></div>
+
+    <!-- Hanging polaroid memories -->
+    <div id="vine" class="vine"><!-- cards injected --></div>
+    <p class="memory-count" id="memory-count"></p>
+
+    <!-- ══════════ Memory Tree ══════════ -->
+    <section id="memory-tree" class="tree-section reveal" aria-label="The memory tree">
+      <h2 class="garden-sub" style="font-size:clamp(24px,4vw,34px);font-style:normal;color:var(--warm-white);">
+        The Memory Tree
+      </h2>
+      <div class="big-tree">
+        <div class="bt-canopy bt-c1"></div>
+        <div class="bt-canopy bt-c2"></div>
+        <div class="bt-canopy bt-c3"></div>
+        <div class="bt-trunk"></div>
+        <div id="tree-photos" class="bt-photos"><!-- special photos injected --></div>
+      </div>
+      <p class="tree-caption">&ldquo;Every memory became a little flower in this garden.&rdquo;</p>
+    </section>
+    <!-- ══════════ Love letter ══════════ -->
+    <section id="love-letter" class="letter-section reveal">
+      <div class="love-letter">
+        <span class="paper-tape" aria-hidden="true"></span>
+        <h3>One Last Little Note&hellip;</h3>
+        <p class="letter-body" id="letter-body">
+          If I could give you one thing today, it would be the ability to see
+          yourself the way the people who love you see you &mdash; beautiful,
+          special, and worth celebrating.
+        </p>
+        <p class="letter-sign" id="letter-sign">Happy Birthday, Bangaram ♥</p>
+        <p class="letter-final-line" id="letter-final-line">
+          May your life always have gardens to walk through, memories to keep,
+          and reasons to smile.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════ Grand finale ══════════ -->
+    <section id="finale" class="finale" aria-label="Final birthday message">
+      <div class="finale-heart" aria-hidden="true">♥</div>
+      <h2 class="finale-title-v3" id="finale-title">HAPPY BIRTHDAY BANGARAM ♥</h2>
+      <p class="finale-sub">This little world was made just for you.</p>
+    </section>
+  </main>
+
+  <!-- ══════════ Lightbox ══════════ -->
+  <div id="lightbox" class="lightbox lightbox-v3" role="dialog" aria-modal="true" aria-label="Memory viewer" hidden>
+    <div class="lightbox-backdrop" data-lb-close></div>
+    <figure class="lightbox-frame">
+      <button class="lb-btn lb-close" data-lb-close aria-label="Close">✕</button>
+      <button class="lb-btn lb-prev" data-lb-prev aria-label="Previous memory">‹</button>
+      <img id="lb-image" src="" alt="" />
+      <button class="lb-btn lb-next" data-lb-next aria-label="Next memory">›</button>
+      <figcaption class="lightbox-caption">
+        <span id="lb-counter" class="lb-counter">Memory 1 of 1</span>
+        <span id="lb-caption-text" class="lb-caption-text"></span>
+      </figcaption>
+    </figure>
+    <div id="lb-petals" class="petals-layer layer" style="position:fixed;z-index:1;" aria-hidden="true"></div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="js/gallery.js"></script>
+</body>
+</html>

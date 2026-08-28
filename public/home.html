@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Little Something For Someone Special… ♥</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="login-body">
+
+  <!-- ══════════ Layered cherry blossom night garden ══════════ -->
+  <div class="scene" aria-hidden="true">
+    <div class="layer" data-depth="0.15">
+      <div class="scene-glow glow-one"></div>
+      <div class="scene-glow glow-two"></div>
+      <div id="stars" class="stars layer"></div>
+      <div class="moon-v3"></div>
+    </div>
+    <div class="layer" data-depth="0.35">
+      <div id="treeline" class="treeline"><!-- distant trees injected --></div>
+    </div>
+    <div class="light-rays"></div>
+    <div id="branch-l" class="branch branch-left" data-depth="0.6"></div>
+    <div id="branch-r" class="branch branch-right" data-depth="0.5"></div>
+    <div id="particles" class="particles layer"></div>
+    <div id="petals-layer" class="petals-layer layer"></div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- ══════════ Stage 1 · Who are you? (letter form) ══════════ -->
+  <main id="login-screen" class="login-screen-v3">
+    <section class="letter-paper" role="form" aria-label="Who are you?">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <h2 class="form-heading">Before we begin&hellip;</h2>
+      <p class="form-sub">Tell me who you are, and let the memories unfold.</p>
+
+      <form id="login-form" novalidate>
+        <div class="field-v3">
+          <input type="text" id="login-name" autocomplete="off" placeholder=" " />
+          <label for="login-name">Your Name</label>
+        </div>
+        <div class="field-v3">
+          <input type="date" id="login-date" placeholder=" " aria-label="Your birthday" />
+          <label for="login-date">Your Birthday</label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-letter btn-hearts">
+          Unlock Your Surprise&nbsp;♥
+          <i style="left:10px;top:-10px;animation-delay:0s">♥</i>
+          <i style="right:14px;top:-12px;animation-delay:-1.4s">♥</i>
+        </button>
+      </form>
+
+      <div id="toast" class="toast toast-v3" role="alert" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- ══════════ Stage 2 · Sealed letter (revealed after validation) ══════════ -->
+  <main id="letter-stage" class="letter-stage" hidden>
+    <section class="sealed-letter" aria-label="Sealed letter">
+      <div class="wax-seal" aria-hidden="true">♥</div>
+      <h1 class="letter-title">A little something<br />for someone very special&hellip;</h1>
+      <p class="letter-sub">This little world has been waiting for you.</p>
+      <button id="open-letter" class="btn btn-open btn-hearts">
+        Open the Letter&nbsp;♥
+        <i style="left:-14px;top:50%;animation-delay:0s">♥</i>
+        <i style="right:-14px;top:20%;animation-delay:-1.2s">♥</i>
+        <i style="right:-8px;bottom:12%;animation-delay:-2.1s">✧</i>
+      </button>
+    </section>
+  </main>
+
+  <!-- ══════════ Cinematic unlock overlay ══════════ -->
+  <div id="unlock-overlay" class="unlock-v3" aria-hidden="true">
+    <div class="unlock-heart-v3">
+      <svg viewBox="0 0 32 29" class="heart-svg">
+        <path d="M16 28.7C10 23.6 0 15.9 0 8.9 0 4 4 .5 8.4.5c3 0 5.9 1.6 7.6 4.3C17.7 2.1 20.6.5 23.6.5 28 .5 32 4 32 8.9c0 7-10 14.7-16 19.8z"/>
+      </svg>
+    </div>
+    <p id="unlock-line1" class="unlock-line">I knew it was you&hellip;</p>
+    <p id="unlock-line2" class="unlock-line"><span class="unlock-name">Welcome,&nbsp;<span id="welcome-name">Beautiful</span>&nbsp;♥</span></p>
+  </div>
+  <div id="bloom-flash" class="bloom-flash" aria-hidden="true"></div>
+  <div id="petal-sweep" class="petal-sweep" aria-hidden="true"></div>
+  <!-- ══════════ Page 2 · Secret blossom garden home ══════════ -->
+  <section id="home-section" class="home-section" hidden>
+
+    <button id="music-toggle" class="music-pill" aria-pressed="false" aria-label="Toggle background music">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      ♪ A Little Tune
+    </button>
+
+    <nav class="nav-v3" aria-label="Main navigation">
+      <a href="#home-top" class="active">♡ Home</a>
+      <a href="gallery.html" id="nav-memories">🌸 Memories</a>
+      <a href="#love-letter">✦ Letter</a>
+    </nav>
+
+    <!-- Layer 7 · main birthday content -->
+    <header id="home-top" class="hero-v3">
+      <div class="hero-inner">
+        <p class="hero-kicker shimmer-text reveal">Happy Birthday</p>
+        <h1 id="hero-name" class="hero-name shimmer-text reveal">Bangaram ♥</h1>
+        <div class="ornament" aria-hidden="true"><span>❀ ❀ ❀</span></div>
+        <p class="hero-gardenline reveal">Today, the whole garden blooms a little brighter because it&rsquo;s your day.</p>
+        <p class="hero-love reveal" style="font-family:var(--font-display);margin-top:10px;color:var(--cherry);"><strong>Made with love, just for you ♥</strong></p>
+        <p class="hero-message reveal" hidden></p><!-- kept for CONFIG.heroMessage injection -->
+      </div>
+    </header>
+
+    <!-- Photo + quote composition -->
+    <section class="quote-stage reveal" aria-live="polite" aria-label="Love quotes">
+      <div class="quote-frame" id="quote-frame"><!-- photos injected --></div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-v3 reveal">
+
+      <button id="open-memories" class="btn btn-primary btn-large btn-hearts">
+        Walk Through Some Memories&nbsp;♥
+        <i style="left:16px;top:-9px;animation-delay:0s">🌸</i>
+        <i style="right:18px;bottom:-10px;animation-delay:-1.5s">♥</i>
+      </button>
+      
+      <p class="cta-sub">Every picture holds a little piece of a moment.</p>
+
+    </div>
+
+    <!-- Love letter anchor (full letter lives on gallery page) -->
+    <footer id="love-letter" class="mini-final" style="margin-top:70px;text-align:center;padding-bottom:200px;">
+      <div class="glow-heart pulse-heart" aria-hidden="true">♥</div>
+    </footer>
+
+    <!-- Fixed bottom composition · quote stacked ABOVE navigation -->
+    <div class="bottom-ui">
+
+      <div class="quote-card">
+        <span class="quote-spark" aria-hidden="true">✦</span>
+        <p id="quote-text">&ldquo;Some people don&rsquo;t just enter our lives&hellip; they make our world a little more beautiful.&rdquo;</p>
+      </div>
+
+      <nav class="nav-v3" aria-label="Main navigation">
+        <a href="#home-top" class="active">♡ Home</a>
+        <a href="gallery.html" id="nav-memories">🌸 Memories</a>
+        <a href="#love-letter">✦ Letter</a>
+      </nav>
+
+    </div>
+  </section>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

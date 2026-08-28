@@ -1,0 +1,1 @@
+import{j as e}from"./framer-motion-DJuh8fP3.js";import{r}from"./react-vendor-BzL9H3zB.js";function i(){return r.useEffect(()=>{window.location.replace("/intro.html")},[]),e.jsx("div",{className:"min-h-screen flex items-center justify-center",children:e.jsx("p",{className:"text-muted-foreground animate-pulse",children:"Loading birthday surprise…"})})}export{i as default};

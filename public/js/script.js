@@ -5,11 +5,11 @@
 
 /* ══════════ 1. PERSONALIZATION — edit everything here ══════════ */
 const CONFIG = {
-  name: "A SPECIAL PERSON",
+  name: "Bangaram",
   birthDate: "2006-09-12",                 // YYYY-MM-DD
 
   heroKicker: "Happy Birthday",
-  heroName: "A Special Person ♥",
+  heroName: "Bangaram ♥",
   gardenLine: "Today, the whole garden blooms a little brighter \u2014 not for any grand occasion, but just because you deserve it.",
   unlockLine1: "I knew it was you…",
 
@@ -39,11 +39,11 @@ const CONFIG = {
 
   letter: {
     body: "If I could give you one thing today, it would be the ability to see yourself the way someone who truly cares sees you — beautiful, special, and worth celebrating.",
-    sign: "Happy Birthday, A Special Person ♥",
+    sign: "Happy Birthday, Bangaram ♥",
     finalLine: "May your life always have gardens to walk through, memories to keep, and reasons to smile — and may I be there for every one of them."
   },
 
-  finaleTitle: "HAPPY BIRTHDAY, A SPECIAL PERSON ♥",
+  finaleTitle: "HAPPY BIRTHDAY, BANGARAM ♥",
   finaleSub: "This little world was made just for you.",
 
   musicEnabled: true,

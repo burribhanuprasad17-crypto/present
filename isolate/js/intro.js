@@ -607,8 +607,7 @@
       </div>
 
       <p class="bi-hold-hint">
-        Click or tap the flower to give it
-        a little love ♥
+        Tap quickly — if you stop, it wilts back! 🌸
       </p>
     `;
 
@@ -626,31 +625,44 @@
     const progress =
       $("[data-progress]", card);
 
+    const TOTAL_BLOOM = 16;
+    const DECAY_MS = 650;
     let step = 0;
     let completed = false;
+    let decayTimer = null;
+
+    function resetDecay() {
+      clearTimeout(decayTimer);
+      decayTimer = setTimeout(() => {
+        if (completed) return;
+        step = Math.max(0, step - 2);
+        flower.dataset.step = step;
+        progress.style.width = `${(step / TOTAL_BLOOM) * 100}%`;
+        if (step > 0) {
+          $("[data-flower-wrap]", card).style.transform =
+            `scale(${0.95 + (step / TOTAL_BLOOM) * 0.1})`;
+        }
+      }, DECAY_MS);
+    }
 
     function bloom() {
       if (completed) return;
 
-      step =
-        Math.min(
-          step + 1,
-          4
-        );
+      step = Math.min(step + 1, TOTAL_BLOOM);
+      flower.dataset.step = step;
+      progress.style.width = `${(step / TOTAL_BLOOM) * 100}%`;
 
-      flower.dataset.step =
-        step;
+      const scale = 0.95 + (step / TOTAL_BLOOM) * 0.1;
+      wrapper.style.transform = `scale(${scale})`;
 
-      progress.style.width =
-        `${step * 25}%`;
+      resetDecay();
 
-      if (step !== 4) return;
+      if (step !== TOTAL_BLOOM) return;
 
       completed = true;
+      clearTimeout(decayTimer);
 
-      flower.classList.add(
-        "bloomed"
-      );
+      flower.classList.add("bloomed");
 
       createBurst(
         wrapper,
@@ -715,7 +727,7 @@
   }
 
   /* ==========================================================
-     SCENE 4 — FOLLOW HEART
+     SCENE 4 — SIMON HEARTS (pattern memory)
      ========================================================== */
 
   function startFollowHearts() {
@@ -727,247 +739,198 @@
 
     card.innerHTML = `
       <p class="bi-eyebrow">
-        Okay, this one's easy...
+        Okay, this one's tricky... 😈
       </p>
 
       <h1
         class="bi-title"
         style="font-size:clamp(26px,5vw,40px)"
       >
-        Follow the right heart. 👀
+        Remember the pattern. ♥
       </h1>
 
-      <p class="bi-line small">
-        They're going to shuffle...
-        pick the one that's glowing.
+      <p class="bi-line small" data-simon-instruct>
+        Watch which hearts light up, then repeat the sequence.
       </p>
 
       <div
-        class="bi-hearts-row"
-        data-hearts-row
+        class="bi-simon-grid"
+        data-simon-grid
+        style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:min(320px,80vw);margin:18px auto 0;"
       >
-        <span
-          class="bi-triheart"
-          data-heart="0"
-        >
-          ♡
-        </span>
-
-        <span
-          class="bi-triheart"
-          data-heart="1"
-        >
-          ♡
-        </span>
-
-        <span
-          class="bi-triheart"
-          data-heart="2"
-        >
-          ♡
-        </span>
+        <button class="bi-simon-tile" data-tile="0" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="1" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="2" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="3" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="4" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="5" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="6" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="7" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
+        <button class="bi-simon-tile" data-tile="8" type="button" style="width:100%;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:white;font-size:clamp(32px,8vw,44px);cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s;user-select:none;">♥</button>
       </div>
 
       <p
         class="bi-hold-hint"
-        data-heart-hint
+        data-simon-hint
       >
-        Watch carefully... 👀
+        Watch the pattern... 👀
       </p>
     `;
 
     setScene(card);
 
-    const row =
-      $(
-        "[data-hearts-row]",
-        card
-      );
-
-    const hearts =
+    const tiles =
       $$(
-        "[data-heart]",
+        "[data-tile]",
         card
       );
 
-    let winner =
-      Math.floor(
-        Math.random() * 3
+    const hint =
+      $(
+        "[data-simon-hint]",
+        card
       );
 
-    let locked = false;
-
-    function positionHearts() {
-      const width =
-        row.clientWidth;
-
-      const heartSize =
-        window.innerWidth <= 600
-          ? 70
-          : 90;
-
-      const gap =
-        Math.max(
-          10,
-          (width -
-            heartSize * 3) /
-            2
-        );
-
-      hearts.forEach(
-        (heart, index) => {
-          heart.style.left =
-            `${
-              index *
-              (heartSize + gap)
-            }px`;
-
-          heart.style.top =
-            "25px";
-        }
+    const instruct =
+      $(
+        "[data-simon-instruct]",
+        card
       );
+
+    const ROUNDS = [3, 4, 5];
+    let currentRound = 0;
+    let sequence = [];
+    let playerIndex = 0;
+    let inputLocked = true;
+
+    function flashTile(index, duration) {
+      return new Promise(resolve => {
+        const tile = tiles[index];
+        if (!tile) { resolve(); return; }
+        tile.style.background = "linear-gradient(135deg,#ff4e95,#ff78b1)";
+        tile.style.boxShadow = "0 0 28px rgba(255,78,149,.7)";
+        tile.style.transform = "scale(1.12)";
+        setTimeout(() => {
+          tile.style.background = "rgba(255,255,255,.07)";
+          tile.style.boxShadow = "none";
+          tile.style.transform = "scale(1)";
+          resolve();
+        }, duration);
+      });
     }
 
-    positionHearts();
+    async function showSequence() {
+      inputLocked = true;
+      hint.textContent = "Watch carefully... 👀";
+      instruct.textContent = `Round ${currentRound + 1} of ${ROUNDS.length} \u2014 watch the pattern!`;
 
-    const shufflePositions = () => {
-      const order =
-        [0, 1, 2].sort(
-          () =>
-            Math.random() - 0.5
-        );
+      await new Promise(r => setTimeout(r, 800));
 
-      hearts.forEach(
-        (heart, index) => {
-          heart.dataset.position =
-            order[index];
-        }
-      );
-    };
+      const baseDelay = Math.max(350, 550 - currentRound * 60);
+      const flashDur = Math.max(250, 400 - currentRound * 40);
 
-    async function shuffle() {
-      for (let i = 0; i < 3; i++) {
-        shufflePositions();
-
-        await new Promise(
-          resolve =>
-            setTimeout(
-              resolve,
-              650
-            )
-        );
+      for (const idx of sequence) {
+        await flashTile(idx, flashDur);
+        await new Promise(r => setTimeout(r, baseDelay - flashDur));
       }
 
-      positionHearts();
-
-      hearts.forEach(
-        (heart, index) => {
-          heart.style.opacity =
-            index === winner
-              ? "1"
-              : "0.7";
-        }
-      );
-
-      const hint =
-        $(
-          "[data-heart-hint]",
-          card
-        );
-
-      hint.textContent =
-        "Pick the glowing heart ♥";
+      inputLocked = false;
+      playerIndex = 0;
+      hint.textContent = "Your turn! ♥";
+      instruct.textContent = "Tap the hearts in the same order.";
     }
 
-    shuffle();
+    function generateSequence() {
+      const len = ROUNDS[currentRound];
+      sequence = [];
+      for (let i = 0; i < len; i++) {
+        sequence.push(Math.floor(Math.random() * 9));
+      }
+    }
 
-    row.addEventListener(
+    function nextRound() {
+      currentRound++;
+      if (currentRound >= ROUNDS.length) {
+        hint.textContent = "PERFECT! ♥";
+        createBurst(
+          $("[data-simon-grid]", card),
+          $("[data-simon-grid]", card).clientWidth / 2,
+          $("[data-simon-grid]", card).clientHeight / 2,
+          30
+        );
+        setTimeout(() => {
+          const next =
+            create(
+              "div",
+              "bi-scene-card"
+            );
+          next.innerHTML = `
+            <p class="bi-eyebrow">
+              YES! ♥
+            </p>
+
+            <h1
+              class="bi-title"
+              style="font-size:clamp(24px,5vw,38px)"
+            >
+              Incredible memory!
+            </h1>
+
+            <p class="bi-line small">
+              Last little thing...
+            </p>
+
+            <button
+              class="bi-btn"
+              type="button"
+              data-action="petals"
+            >
+              Reveal what's underneath 🌸
+            </button>
+          `;
+          setScene(next);
+        }, 1100);
+        return;
+      }
+      generateSequence();
+      showSequence();
+    }
+
+    generateSequence();
+    showSequence();
+
+    $("[data-simon-grid]", card).addEventListener(
       "click",
       event => {
-        if (locked) return;
+        if (inputLocked) return;
+        const tile = event.target.closest("[data-tile]");
+        if (!tile) return;
 
-        const heart =
-          event.target.closest(
-            "[data-heart]"
-          );
+        const selected = Number(tile.dataset.tile);
 
-        if (!heart) return;
+        if (selected === sequence[playerIndex]) {
+          flashTile(selected, 200);
+          playerIndex++;
 
-        const selected =
-          Number(
-            heart.dataset.heart
-          );
-
-        if (selected === winner) {
-          locked = true;
-
-          heart.textContent =
-            "♥";
-
-          heart.classList.add(
-            "win"
-          );
-
-          createBurst(
-            row,
-            heart.offsetLeft +
-              heart.offsetWidth / 2,
-            heart.offsetTop +
-              heart.offsetHeight / 2,
-            20
-          );
-
-          setTimeout(() => {
-            const next =
-              create(
-                "div",
-                "bi-scene-card"
-              );
-
-            next.innerHTML = `
-              <p class="bi-eyebrow">
-                YES! ♥
-              </p>
-
-              <h1
-                class="bi-title"
-                style="font-size:clamp(24px,5vw,38px)"
-              >
-                I knew you could do it.
-              </h1>
-
-              <p class="bi-line small">
-                Last little thing...
-              </p>
-
-              <button
-                class="bi-btn"
-                type="button"
-                data-action="petals"
-              >
-                Reveal what's underneath 🌸
-              </button>
-            `;
-
-            setScene(next);
-          }, 1000);
-
+          if (playerIndex === sequence.length) {
+            inputLocked = true;
+            hint.textContent = "Correct! ♥";
+            instruct.textContent = currentRound < ROUNDS.length - 1
+              ? "Get ready for the next round..."
+              : "One final round!";
+            setTimeout(nextRound, 900);
+          }
         } else {
-          heart.classList.add(
-            "shake"
-          );
-
+          inputLocked = true;
+          hint.textContent = "Oops! Watch again 😂";
+          tiles.forEach(t => {
+            t.style.animation = "bi-shake 0.4s ease";
+            setTimeout(() => { t.style.animation = ""; }, 450);
+          });
           setTimeout(() => {
-            heart.classList.remove(
-              "shake"
-            );
-          }, 450);
-
-          $(
-            "[data-heart-hint]",
-            card
-          ).textContent =
-            "Nope 😂 — try again.";
+            generateSequence();
+            showSequence();
+          }, 1200);
         }
       }
     );
@@ -1554,28 +1517,6 @@
           );
       }
     }
-  );
-
-  /* ==========================================================
-     SKIP BUTTON
-     ========================================================== */
-
-  const skip =
-    create(
-      "button",
-      "bi-skip",
-      "skip intro →"
-    );
-
-  skip.type = "button";
-
-  skip.addEventListener(
-    "click",
-    revealLogin
-  );
-
-  host.appendChild(
-    skip
   );
 
   /* ==========================================================

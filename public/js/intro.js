@@ -697,7 +697,7 @@
           <button
             class="bi-btn"
             type="button"
-            data-action="hearts"
+            data-action="stars"
           >
             Continue 💕
           </button>
@@ -724,6 +724,262 @@
         }
       }
     );
+  }
+
+  /* ==========================================================
+     SCENE 3a — STAR CATCHER
+     ========================================================== */
+
+  function startStarCatcher() {
+    const card = create("div", "bi-scene-card");
+
+    card.innerHTML = `
+      <p class="bi-eyebrow">Mission 3 ✨</p>
+
+      <h1 class="bi-title" style="font-size:clamp(26px,5vw,42px)">
+        Catch the falling stars! ✨
+      </h1>
+
+      <div class="bi-star-hud">
+        <span class="bi-star-timer" data-star-timer>12s</span>
+        <span class="bi-star-count" data-star-count>0 / 8 caught</span>
+      </div>
+
+      <div class="bi-arena" data-star-arena>
+      </div>
+
+      <p class="bi-hold-hint" data-star-hint>
+        Click each star before it fades! ⚡
+      </p>
+    `;
+
+    setScene(card);
+
+    const arena = $("[data-star-arena]", card);
+    const timerEl = $("[data-star-timer]", card);
+    const countEl = $("[data-star-count]", card);
+    const hintEl = $("[data-star-hint]", card);
+    let caught = 0;
+    const needed = 8;
+    let timeLeft = 12;
+    let gameOver = false;
+    const spawnedStars = [];
+
+    const timerInterval = setInterval(() => {
+      if (gameOver) return;
+      timeLeft--;
+      timerEl.textContent = timeLeft + "s";
+      if (timeLeft <= 4) timerEl.style.color = "#ff5a5a";
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        gameOver = true;
+        hintEl.textContent = "Time's up! Let's try again 😅";
+        spawnedStars.forEach(s => s.remove());
+        setTimeout(() => startStarCatcher(), 1500);
+      }
+    }, 1000);
+
+    function spawnStar() {
+      if (gameOver) return;
+      const star = create("span", "bi-caught-star", "⭐");
+      const size = random(28, 42);
+      star.style.fontSize = size + "px";
+      star.style.left = random(8, 85) + "%";
+      star.style.top = "-40px";
+      star.style.opacity = "0";
+      arena.appendChild(star);
+      spawnedStars.push(star);
+
+      const dur = random(2800, 4200);
+      const anim = star.animate([
+        { transform: "translateY(0) rotate(0deg) scale(0.4)", opacity: 0 },
+        { opacity: 1, offset: 0.12 },
+        { transform: `translateY(${arena.clientHeight + 60}px) rotate(${random(180,360)}deg) scale(1)`, opacity: 0 }
+      ], { duration: dur, easing: "linear" });
+
+      function onCatch(e) {
+        e.preventDefault();
+        if (gameOver || star.dataset.caught) return;
+        star.dataset.caught = "true";
+        caught++;
+        countEl.textContent = caught + " / " + needed + " caught";
+        star.style.filter = "drop-shadow(0 0 18px gold)";
+        star.animate([
+          { transform: "scale(1)", opacity: 1 },
+          { transform: "scale(2.2)", opacity: 0 }
+        ], { duration: 400, easing: "ease-out" }).onfinish = () => star.remove();
+        createBurst(arena, star.offsetLeft, star.offsetTop, 8);
+        if (caught >= needed && !gameOver) {
+          gameOver = true;
+          clearInterval(timerInterval);
+          spawnedStars.forEach(s => { try { s.remove(); } catch(e){} });
+          hintEl.textContent = "ALL CAUGHT! ✨";
+          setTimeout(() => {
+            const next = create("div", "bi-scene-card");
+            next.innerHTML = `
+              <p class="bi-eyebrow">Incredible reflexes! ✨</p>
+              <h1 class="bi-title" style="font-size:clamp(24px,5vw,38px)">
+                Every star you caught was worth it.
+              </h1>
+              <p class="bi-line small">One more challenge ahead...</p>
+              <button class="bi-btn" type="button" data-action="balloon">
+                Inflate the heart 🎈
+              </button>
+            `;
+            setScene(next);
+          }, 900);
+        }
+      }
+
+      star.addEventListener("click", onCatch);
+      star.addEventListener("touchend", onCatch, { passive: false });
+
+      anim.onfinish = () => {
+        if (!star.dataset.caught) star.remove();
+      };
+
+      const nextDelay = random(350, 900);
+      setTimeout(spawnStar, nextDelay);
+    }
+
+    setTimeout(spawnStar, 600);
+  }
+
+  /* ==========================================================
+     SCENE 3b — BALLOON INFLATION
+     ========================================================== */
+
+  function startBalloon() {
+    const card = create("div", "bi-scene-card");
+
+    card.innerHTML = `
+      <p class="bi-eyebrow">Mission 4 🎈</p>
+
+      <h1 class="bi-title" style="font-size:clamp(26px,5vw,42px)">
+        Inflate the heart balloon.
+      </h1>
+
+      <div class="bi-balloon-wrap">
+        <div class="bi-balloon-heart" data-balloon-heart>♥</div>
+        <div class="bi-balloon-ribbon"></div>
+      </div>
+
+      <div class="bi-progress">
+        <i data-balloon-progress></i>
+      </div>
+
+      <p class="bi-hold-hint" data-balloon-hint>
+        Hold to inflate — release when it's just right! 🎈
+      </p>
+    `;
+
+    setScene(card);
+
+    const balloonEl = $("[data-balloon-heart]", card);
+    const progressBar = $("[data-balloon-progress]", card);
+    const hintEl = $("[data-balloon-hint]", card);
+    const TARGET = 88;
+    const TOLERANCE = 12;
+    let inflated = 0;
+    let inflating = false;
+    let finished = false;
+    let decayInterval = null;
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    function updateSize() {
+      const pct = inflated / TARGET;
+      const scale = 0.3 + pct * 0.7;
+      balloonEl.style.transform = `scale(${scale})`;
+      balloonEl.style.opacity = 0.4 + pct * 0.6;
+      progressBar.style.width = Math.min(100, (inflated / (TARGET + TOLERANCE)) * 100) + "%";
+    }
+
+    function startInflate() {
+      if (finished) return;
+      inflating = true;
+      clearInterval(decayInterval);
+      decayInterval = setInterval(() => {
+        inflated = Math.min(inflated + 1.8, TARGET + TOLERANCE + 15);
+        updateSize();
+      }, 35);
+    }
+
+    function stopInflate() {
+      if (finished || !inflating) return;
+      inflating = false;
+      clearInterval(decayInterval);
+      attempts++;
+
+      const diff = Math.abs(inflated - TARGET);
+      if (diff <= TOLERANCE) {
+        finished = true;
+        balloonEl.classList.add("bi-balloon-win");
+        progressBar.style.width = "100%";
+        hintEl.textContent = "Perfect! 🎈✨";
+        createBurst(balloonEl, balloonEl.clientWidth / 2, balloonEl.clientHeight / 2, 28);
+        setTimeout(() => {
+          const next = create("div", "bi-scene-card");
+          next.innerHTML = `
+            <p class="bi-eyebrow">Wow! 🎈✨</p>
+            <h1 class="bi-title" style="font-size:clamp(24px,5vw,38px)">
+              You know exactly how much love to give.
+            </h1>
+            <p class="bi-line small">Almost there...</p>
+            <button class="bi-btn" type="button" data-action="hearts">
+              One last thing 💕
+            </button>
+          `;
+          setScene(next);
+        }, 1200);
+      } else if (attempts >= maxAttempts) {
+        finished = true;
+        hintEl.textContent = "That's close enough — you tried your best! 💕";
+        setTimeout(() => {
+          const next = create("div", "bi-scene-card");
+          next.innerHTML = `
+            <p class="bi-eyebrow">Almost! 🎈</p>
+            <h1 class="bi-title" style="font-size:clamp(24px,5vw,38px)">
+              You know exactly how much love to give.
+            </h1>
+            <p class="bi-line small">Almost there...</p>
+            <button class="bi-btn" type="button" data-action="hearts">
+              One last thing 💕
+            </button>
+          `;
+          setScene(next);
+        }, 1200);
+      } else {
+        if (inflated > TARGET + TOLERANCE) {
+          hintEl.textContent = "Too much! It almost popped! 😱";
+          balloonEl.animate([
+            { transform: `scale(${inflated / TARGET})`, opacity: 1 },
+            { transform: "scale(0.15)", opacity: 0 }
+          ], { duration: 500, easing: "ease-out" });
+        } else {
+          hintEl.textContent = "Not enough! Hold it longer! 💪";
+          balloonEl.animate([
+            { transform: `scale(${inflated / TARGET})` },
+            { transform: "scale(0.3)" }
+          ], { duration: 400, easing: "ease-in" });
+        }
+        inflated = 0;
+        updateSize();
+        progressBar.style.width = "0%";
+      }
+    }
+
+    balloonEl.addEventListener("mousedown", startInflate);
+    balloonEl.addEventListener("mouseup", stopInflate);
+    balloonEl.addEventListener("mouseleave", stopInflate);
+    balloonEl.addEventListener("touchstart", (e) => { e.preventDefault(); startInflate(); }, { passive: false });
+    balloonEl.addEventListener("touchend", stopInflate);
+
+    $("[data-balloon-wrap]", card).addEventListener("mousedown", startInflate);
+    $("[data-balloon-wrap]", card).addEventListener("mouseup", stopInflate);
+    $("[data-balloon-wrap]", card).addEventListener("mouseleave", stopInflate);
+    $("[data-balloon-wrap]", card).addEventListener("touchstart", (e) => { e.preventDefault(); startInflate(); }, { passive: false });
+    $("[data-balloon-wrap]", card).addEventListener("touchend", stopInflate);
   }
 
   /* ==========================================================
@@ -1216,51 +1472,182 @@
      SCENE 6 — SURPRISE
      ========================================================== */
 
+  /* Sad animation sequences — each No click plays a different one */
+  const SAD_ANIMS = [
+    {
+      emoji: "💔",
+      msg: "Are you sure? I worked really hard on this...",
+      filter: "saturate(0.7)"
+    },
+    {
+      emoji: "🥀",
+      msg: "The flowers are wilting now...",
+      filter: "saturate(0.5) brightness(0.92)"
+    },
+    {
+      emoji: "🌧️",
+      msg: "It's starting to rain in the garden...",
+      filter: "saturate(0.35) brightness(0.85)"
+    },
+    {
+      emoji: "😢",
+      msg: "Please? Pretty please? 🥺",
+      filter: "saturate(0.25) brightness(0.8)"
+    },
+    {
+      emoji: "🥺",
+      msg: "I promise it's worth it! Just say yes!",
+      filter: "saturate(0.3) brightness(0.82)"
+    },
+    {
+      emoji: "😿",
+      msg: "My heart can't take much more of this...",
+      filter: "saturate(0.2) brightness(0.78)"
+    },
+    {
+      emoji: "💔",
+      msg: "Okay fine, I'll just sit here and cry...",
+      filter: "saturate(0.15) brightness(0.75)"
+    }
+  ];
+
+  let noClickCount = 0;
+
   function startSurprise() {
-    const card =
-      create(
-        "div",
-        "bi-scene-card"
-      );
+    const card = create("div", "bi-scene-card");
+    noClickCount = 0;
 
     card.innerHTML = `
-      <p class="bi-eyebrow">
-        Perfect. You passed all the tests. 😌
-      </p>
+      <p class="bi-eyebrow">Perfect. You passed all the tests. 😌</p>
 
-      <h1
-        class="bi-title"
-        style="font-size:clamp(26px,5vw,42px)"
-      >
+      <h1 class="bi-title" style="font-size:clamp(26px,5vw,42px)">
         Wait... one more thing.
       </h1>
 
-      <p class="bi-line">
-        Do you like surprises?
-      </p>
+      <p class="bi-line">Do you like surprises?</p>
+
+      <div class="bi-sad-anim" data-sad-anim style="display:none;"></div>
 
       <div class="bi-choices">
-
-        <button
-          class="bi-choice yes"
-          type="button"
-          data-action="finale"
-        >
-          YES ❤️
-        </button>
-
-        <button
-          class="bi-choice"
-          type="button"
-          data-action="finale"
-        >
-          Obviously 😂
-        </button>
-
+        <button class="bi-choice yes" type="button" data-yes-btn>YES ❤️</button>
+        <button class="bi-choice no-btn" type="button" data-no-btn>No</button>
       </div>
     `;
 
     setScene(card);
+
+    const yesBtn = $("[data-yes-btn]", card);
+    const noBtn = $("[data-no-btn]", card);
+    const sadAnim = $("[data-sad-anim]", card);
+
+    yesBtn.addEventListener("click", () => {
+      /* Exciting celebration animation */
+      yesBtn.style.background = "linear-gradient(135deg, #ff4e95, #ffd700)";
+      yesBtn.style.boxShadow = "0 0 40px rgba(255,78,149,.8), 0 0 80px rgba(255,215,0,.4)";
+      yesBtn.style.transform = "scale(1.15)";
+      yesBtn.style.pointerEvents = "none";
+      if (noBtn) noBtn.style.display = "none";
+
+      /* Burst of hearts + sparkles */
+      const rect = yesBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const symbols = ["💖", "✨", "🎉", "💕", "🌟", "♥", "🌸", "🥳"];
+      for (let i = 0; i < 40; i++) {
+        const s = create("span", "bi-burst", symbols[Math.floor(Math.random() * symbols.length)]);
+        s.style.left = cx + "px";
+        s.style.top = cy + "px";
+        s.style.fontSize = random(16, 36) + "px";
+        const angle = random(0, Math.PI * 2);
+        const dist = random(60, 280);
+        s.style.setProperty("--bx", Math.cos(angle) * dist + "px");
+        s.style.setProperty("--by", Math.sin(angle) * dist - 50 + "px");
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 1200);
+      }
+
+      /* Sad animation cleanup if any */
+      if (sadAnim) sadAnim.style.display = "none";
+      if (card.parentElement) card.style.filter = "none";
+
+      /* Update text */
+      const eyebrow = card.querySelector(".bi-eyebrow");
+      const title = card.querySelector(".bi-title");
+      const line = card.querySelector(".bi-line");
+      if (eyebrow) eyebrow.textContent = "YES! That's the spirit! 🎉";
+      if (title) title.textContent = "I knew you'd say that!";
+      if (line) line.textContent = "Get ready for something magical...";
+
+      setTimeout(() => startFinale(), 2200);
+    });
+
+    noBtn.addEventListener("click", () => {
+      const anim = SAD_ANIMS[noClickCount % SAD_ANIMS.length];
+      noClickCount++;
+
+      /* Show sad animation */
+      sadAnim.style.display = "block";
+      sadAnim.innerHTML = `
+        <div class="bi-sad-emoji" style="font-size:64px;opacity:0;transform:scale(0.3);">
+          ${anim.emoji}
+        </div>
+        <p class="bi-sad-msg" style="opacity:0;margin-top:10px;font-size:clamp(15px,3vw,19px);color:rgba(255,255,255,.85);">
+          ${anim.msg}
+        </p>
+      `;
+
+      const emoji = sadAnim.querySelector(".bi-sad-emoji");
+      const msg = sadAnim.querySelector(".bi-sad-msg");
+
+      emoji.animate([
+        { transform: "scale(0.3) rotate(-15deg)", opacity: 0 },
+        { transform: "scale(1.15) rotate(5deg)", opacity: 1, offset: 0.6 },
+        { transform: "scale(1) rotate(0deg)", opacity: 1 }
+      ], { duration: 800, easing: "cubic-bezier(.2,.8,.2,1)" });
+      emoji.style.opacity = "1";
+      emoji.style.transform = "scale(1)";
+
+      msg.animate([
+        { opacity: 0, transform: "translateY(12px)" },
+        { opacity: 1, transform: "translateY(0)" }
+      ], { duration: 600, delay: 300, easing: "ease-out" });
+      msg.style.opacity = "1";
+
+      /* Sad float-away particles */
+      const syms = ["💧", "😢", "💙", "🌧️"];
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          const p = create("span", "bi-burst", syms[Math.floor(Math.random() * syms.length)]);
+          p.style.left = random(20, 80) + "%";
+          p.style.top = "50%";
+          p.style.fontSize = random(14, 26) + "px";
+          p.style.setProperty("--bx", random(-80, 80) + "px");
+          p.style.setProperty("--by", random(-200, -80) + "px");
+          card.appendChild(p);
+          setTimeout(() => p.remove(), 1100);
+        }, i * 150);
+      }
+
+      /* Desaturate the background */
+      card.style.filter = anim.filter;
+
+      /* Update button label */
+      const btns = [
+        "Are you sure? 🥺", "Really? 😿", "Please? 🥺",
+        "Pretty please? 💔", "I'm begging you! 😭",
+        "Just this once? 🥺", "...please? 💔"
+      ];
+      noBtn.textContent = btns[noClickCount % btns.length];
+
+      /* After many 'No' clicks, force Yes */
+      if (noClickCount >= 7) {
+        yesBtn.textContent = "OK FINE YES ❤️";
+        yesBtn.style.animation = "bi-heartbeat 0.8s ease-in-out infinite";
+        noBtn.textContent = "...okay, I give up 😂";
+        noBtn.style.opacity = "0.5";
+        noBtn.style.pointerEvents = "none";
+      }
+    });
   }
 
   /* ==========================================================
@@ -1484,6 +1871,14 @@
 
         case "bloom":
           startBloomFlower();
+          break;
+
+        case "stars":
+          startStarCatcher();
+          break;
+
+        case "balloon":
+          startBalloon();
           break;
 
         case "hearts":

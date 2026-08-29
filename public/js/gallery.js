@@ -91,6 +91,33 @@
     });
   }
 
+  /* ── Mosaic Grid — second section showing all photos in a grid ── */
+  function renderMosaicGrid() {
+    const holder = document.getElementById("mosaic-vine");
+    if (!holder) return;
+    const shuffled = [...memories].sort(() => Math.random() - 0.5);
+    shuffled.forEach((m, i) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "memory-card v3 reveal";
+      const variant = VARIANTS[i % VARIANTS.length];
+      card.classList.add(variant);
+      card.style.setProperty("--enter-delay", (i * 0.08).toFixed(2) + "s");
+
+      card.innerHTML = `
+        ${variant === "pin" ? '<span class="pin" aria-hidden="true"></span>' : ""}
+        <span class="photo-frame">
+          <img src="${m.image}" alt="${m.caption}" loading="lazy" />
+          <span class="caption">${m.caption}</span>
+        </span>`;
+      card.addEventListener("click", () => {
+        const origIdx = memories.indexOf(m);
+        if (origIdx !== -1) openLightbox(origIdx);
+      });
+      holder.appendChild(card);
+    });
+  }
+
   /* ── Lightbox ── */
   function updateLightbox() {
     const m = memories[current];
@@ -125,6 +152,7 @@
   
   renderCards();
   renderMemoryTree();
+  renderMosaicGrid();
 
   // LIGHTBOX EVENT HANDLING - delegate from the lightbox container
   function handleLightboxClick(e) {

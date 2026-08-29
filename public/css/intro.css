@@ -1040,6 +1040,111 @@
 }
 
 /* ============================================================
+   STAR CATCHER
+   ============================================================ */
+
+.bi-star-hud {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bi-star-timer {
+  color: #ffb3d2;
+  font-variant-numeric: tabular-nums;
+}
+
+.bi-star-count {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bi-caught-star {
+  position: absolute;
+  cursor: pointer;
+  user-select: none;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+  transition: filter 0.15s ease;
+  z-index: 2;
+}
+
+.bi-caught-star:hover {
+  filter: drop-shadow(0 0 18px rgba(255, 215, 0, 1)) brightness(1.3);
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   BALLOON INFLATION
+   ============================================================ */
+
+.bi-balloon-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto 5px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.bi-balloon-heart {
+  font-size: 100px;
+  color: #ff6b9d;
+  filter:
+    drop-shadow(0 0 12px rgba(255, 80, 150, 0.8))
+    drop-shadow(0 0 40px rgba(255, 80, 150, 0.4));
+  transition: transform 0.08s linear, opacity 0.08s linear;
+  transform: scale(0.3);
+  opacity: 0.4;
+}
+
+.bi-balloon-ribbon {
+  width: 3px;
+  height: 50px;
+  background: linear-gradient(to bottom, #ff6b9d, transparent);
+  border-radius: 2px;
+  margin-top: -6px;
+}
+
+.bi-balloon-win {
+  animation: bi-balloon-celebrate 0.6s ease;
+  color: #ffd700 !important;
+  filter:
+    drop-shadow(0 0 20px rgba(255, 215, 0, 0.9))
+    drop-shadow(0 0 60px rgba(255, 215, 0, 0.5)) !important;
+}
+
+@keyframes bi-balloon-celebrate {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.35) rotate(10deg); }
+  60% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1.15); }
+}
+
+/* ============================================================
+   SAD / EXCITED ANIMATIONS
+   ============================================================ */
+
+.bi-sad-anim {
+  text-align: center;
+  min-height: 90px;
+  margin-top: 12px;
+}
+
+.no-btn {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.no-btn:hover {
+  background: rgba(255, 80, 80, 0.2);
+  border-color: rgba(255, 80, 80, 0.4);
+}
+
+/* ============================================================
    CHOICES
    ============================================================ */
 
@@ -1396,6 +1501,19 @@
 
   .bi-choice {
     width: 100%;
+  }
+
+  .bi-star-hud {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bi-balloon-heart {
+    font-size: 70px;
+  }
+
+  .bi-sad-emoji {
+    font-size: 50px !important;
   }
 
   .bi-skip {

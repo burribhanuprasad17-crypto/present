@@ -444,9 +444,116 @@ function startHomeExperience() {
   spawnPetals(petals, 12, true);
   spawnFireflies(particles, 7);
   startQuotes();
+  buildGiftGarden();
   const heroInner = document.querySelector(".hero-inner");
   if (heroInner) spawnRisingHearts(heroInner, 6);
   document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
+}
+
+/* ══════════ Christmas tree garden with random gift boxes ══════════ */
+function buildGiftGarden() {
+  const scene = document.getElementById("xmas-scene");
+  if (!scene) return;
+
+  const TREE_DEFS = [
+    { left: '8%',  bottom: '0', layers: 3, size: 28 },
+    { left: '30%', bottom: '0', layers: 4, size: 34 },
+    { left: '55%', bottom: '0', layers: 3, size: 26 },
+    { left: '78%', bottom: '0', layers: 4, size: 32 },
+  ];
+
+  const lightColors = ['#ff6b9d', '#ffd700', '#6bffb8', '#87ceeb', '#ff6347', '#dda0dd'];
+
+  TREE_DEFS.forEach(def => {
+    const tree = document.createElement('div');
+    tree.className = 'xmas-tree';
+    tree.style.left = def.left;
+    tree.style.bottom = def.bottom;
+
+    let html = '<div class="tree-star">⭐</div>';
+    html += '<div class="tree-body">';
+    for (let i = 0; i < def.layers; i++) {
+      const layerSize = def.size + i * 10;
+      html += `<div class="tree-layer" style="--layer-size:${layerSize}px;">${'🎄'.repeat(Math.min(5, 2 + i))}</div>`;
+    }
+    html += '</div>';
+    html += '<div class="tree-trunk">🪵</div>';
+
+    /* Lights */
+    html += '<div class="tree-lights">';
+    for (let l = 0; l < 8; l++) {
+      const col = lightColors[Math.floor(rand(0, lightColors.length))];
+      const lx = rand(10, 90);
+      const ly = rand(15, 85);
+      const dur = rand(1, 2.5);
+      const del = rand(0, 1.5);
+      html += `<i style="left:${lx}%;top:${ly}%;background:${col};box-shadow:0 0 6px ${col};--dur:${dur}s;animation-delay:${del}s;"></i>`;
+    }
+    html += '</div>';
+
+    tree.innerHTML = html;
+    scene.appendChild(tree);
+  });
+
+  /* Random gift boxes — position changes every visit */
+  const GIFT_ITEMS = ['🎁', '🎀', '💝', '🎊', '💌', '🪅', '🪩', '🎵'];
+  const GIFT_PHOTOS = [
+    { img: 'images/photo1.jpeg', text: 'A cherished memory ♥' },
+    { img: 'images/photo3.jpeg', text: 'One of our special days.' },
+    { img: 'images/photo5.jpeg', text: 'A moment to treasure.' },
+    { img: 'images/photo7.jpeg', text: 'Smile — this one is yours.' },
+    { img: 'images/photo9.jpeg', text: 'You make life beautiful.' },
+    { img: 'images/photo11.jpeg', text: 'Always here, always yours.' },
+  ];
+
+  const giftCount = 6;
+  const usedPositions = [];
+
+  for (let g = 0; g < giftCount; g++) {
+    const box = document.createElement('div');
+    box.className = 'gift-box';
+
+    /* Random but non-overlapping positions */
+    let bx, by, attempts = 0;
+    do {
+      bx = rand(5, 90);
+      by = rand(10, 85);
+      attempts++;
+    } while (attempts < 50 && usedPositions.some(p =>
+      Math.abs(p.x - bx) < 12 && Math.abs(p.y - by) < 14
+    ));
+    usedPositions.push({ x: bx, y: by });
+
+    const boxSize = rand(32, 48);
+    box.style.left = bx + '%';
+    box.style.top = by + '%';
+    box.style.setProperty('--box-size', boxSize + 'px');
+    box.style.animationDelay = rand(0, 2) + 's';
+
+    const giftIcon = GIFT_ITEMS[Math.floor(rand(0, GIFT_ITEMS.length))];
+    const photo = GIFT_PHOTOS[g % GIFT_PHOTOS.length];
+
+    box.innerHTML = `
+      <span class="box-icon">${giftIcon}</span>
+      <span class="box-label">Open me</span>
+      <div class="gift-reveal" data-reveal>
+        <img src="${photo.img}" alt="${photo.text}" loading="lazy" />
+        <p>${photo.text}</p>
+      </div>
+    `;
+
+    box.addEventListener('click', () => {
+      if (box.classList.contains('revealed')) return;
+      box.classList.add('revealed');
+      const reveal = box.querySelector('[data-reveal]');
+      setTimeout(() => {
+        reveal.classList.add('show');
+      }, 200);
+      createBurst(box, box.clientWidth / 2, box.clientHeight / 2, 10);
+    });
+
+    scene.appendChild(box);
+  }
 }
 
 /* Photo + quote crossfade composition — fixed elegant frame; each photo

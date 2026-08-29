@@ -373,7 +373,7 @@
 
     card.innerHTML = `
       <p class="bi-eyebrow">
-        First mission...
+        Mission 1 💕
       </p>
 
       <h1
@@ -995,7 +995,7 @@
 
     card.innerHTML = `
       <p class="bi-eyebrow">
-        Okay, this one's tricky... 😈
+        Mission 5 😈
       </p>
 
       <h1
@@ -1205,7 +1205,7 @@
 
     card.innerHTML = `
       <p class="bi-eyebrow">
-        One tiny favor...
+        Mission 6 🌸
       </p>
 
       <h1

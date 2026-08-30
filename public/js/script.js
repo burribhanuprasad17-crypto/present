@@ -576,7 +576,8 @@ function startQuotes() {
   spacer.className = "quote-spacer";
   frame.appendChild(spacer);
 
-  const shots = CONFIG.photos.slice(0, Math.max(4, CONFIG.quotes.length)).map((p) => {
+  const SHOTS_COUNT = 10;
+  const shots = CONFIG.photos.slice(0, SHOTS_COUNT).map((p) => {
     const img = document.createElement("img");
     img.src = p.image;
     img.alt = "";
@@ -592,9 +593,9 @@ function startQuotes() {
   setInterval(() => {
     quoteEl.classList.add("fading");
     setTimeout(() => {
-      idx = (idx + 1) % CONFIG.quotes.length;
-      quoteEl.textContent = `\u201C${CONFIG.quotes[idx]}\u201D`;
-      shots.forEach((img, i) => img.classList.toggle("live", i === idx % shots.length));
+      idx = (idx + 1) % shots.length;
+      quoteEl.textContent = `\u201C${CONFIG.quotes[idx % CONFIG.quotes.length]}\u201D`;
+      shots.forEach((img, i) => img.classList.toggle("live", i === idx));
       quoteEl.classList.remove("fading");
     }, 800);
   }, 6000);

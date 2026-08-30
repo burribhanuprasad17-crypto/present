@@ -23,26 +23,26 @@ const CONFIG = {
 
   // Photos used by the gallery AND the home quote compositions (first 4).
   photos: [
-    { image: "images/photo1.jpeg", caption: "A beautiful smile that lights up every room ♥" },
-    { image: "images/photo2.jpeg", caption: "Grace in every glance." },
-    { image: "images/photo3.jpeg", caption: "Flowers in your hair, sunshine in your soul." },
-    { image: "images/photo4.jpeg", caption: "Standing tall, shining bright." },
-    { image: "images/photo5.jpeg", caption: "The garden couldn't compete with your smile." },
-    { image: "images/photo6.jpeg", caption: "A little mystery never hurt anyone." },
-    { image: "images/photo7.jpeg", caption: "Quiet moments, big dreams." },
-    { image: "images/photo8.jpeg", caption: "Blue as the sky, bright as your spirit." },
-    { image: "images/photo9.jpeg", caption: "Some moments are better together ♥" },
-    { image: "images/photo10.jpeg", caption: "Sweet celebrations and even sweeter memories." },
-    { image: "images/photo11.jpeg", caption: "Hello Kitty knows cuteness when she sees it." },
-    { image: "images/photo12.jpeg", caption: "A bow for the prettiest smile." },
-    { image: "images/photo13.jpeg", caption: "Eyes that tell a thousand stories." },
-    { image: "images/photo14.jpeg", caption: "Family is the heart of every memory ♥" },
-    { image: "images/photo15.jpeg", caption: "Together is the best place to be." },
-    { image: "images/photo16.jpeg", caption: "Candid moments hit different." },
-    { image: "images/photo17.jpeg", caption: "That golden hour glow." },
-    { image: "images/photo18.jpeg", caption: "Beauty that needs no filter." },
-    { image: "images/photo19.jpeg", caption: "Every angle, every moment, pure magic." },
-    { image: "images/photo20.jpeg", caption: "And this is only the beginning ♥" }
+    { image: "assets/photo1.jpeg", caption: "A beautiful smile that lights up every room ♥" },
+    { image: "assets/photo2.jpeg", caption: "Grace in every glance." },
+    { image: "assets/photo3.jpeg", caption: "Flowers in your hair, sunshine in your soul." },
+    { image: "assets/photo4.jpeg", caption: "Standing tall, shining bright." },
+    { image: "assets/photo5.jpeg", caption: "The garden couldn't compete with your smile." },
+    { image: "assets/photo6.jpeg", caption: "A little mystery never hurt anyone." },
+    { image: "assets/photo7.jpeg", caption: "Quiet moments, big dreams." },
+    { image: "assets/photo8.jpeg", caption: "Blue as the sky, bright as your spirit." },
+    { image: "assets/photo9.jpeg", caption: "Some moments are better together ♥" },
+    { image: "assets/photo10.jpeg", caption: "Sweet celebrations and even sweeter memories." },
+    { image: "assets/photo11.jpeg", caption: "Hello Kitty knows cuteness when she sees it." },
+    { image: "assets/photo12.jpeg", caption: "A bow for the prettiest smile." },
+    { image: "assets/photo13.jpeg", caption: "Eyes that tell a thousand stories." },
+    { image: "assets/photo14.jpeg", caption: "Family is the heart of every memory ♥" },
+    { image: "assets/photo15.jpeg", caption: "Together is the best place to be." },
+    { image: "assets/photo16.jpeg", caption: "Candid moments hit different." },
+    { image: "assets/photo17.jpeg", caption: "That golden hour glow." },
+    { image: "assets/photo18.jpeg", caption: "Beauty that needs no filter." },
+    { image: "assets/photo19.jpeg", caption: "Every angle, every moment, pure magic." },
+    { image: "assets/photo20.jpeg", caption: "And this is only the beginning ♥" }
   ],
 
   letter: {
@@ -506,12 +506,12 @@ function buildGiftGarden() {
   /* Random gift boxes — position changes every visit */
   const GIFT_ITEMS = ['🎁', '🎀', '💝', '🎊', '💌', '🪅', '🪩', '🎵'];
   const GIFT_PHOTOS = [
-    { img: 'images/photo1.jpeg', text: 'A cherished memory ♥' },
-    { img: 'images/photo3.jpeg', text: 'One of our special days.' },
-    { img: 'images/photo5.jpeg', text: 'A moment to treasure.' },
-    { img: 'images/photo7.jpeg', text: 'Smile — this one is yours.' },
-    { img: 'images/photo9.jpeg', text: 'You make life beautiful.' },
-    { img: 'images/photo11.jpeg', text: 'Always here, always yours.' },
+    { img: 'assets/photo1.jpeg', text: 'A cherished memory ♥' },
+    { img: 'assets/photo3.jpeg', text: 'One of our special days.' },
+    { img: 'assets/photo5.jpeg', text: 'A moment to treasure.' },
+    { img: 'assets/photo7.jpeg', text: 'Smile — this one is yours.' },
+    { img: 'assets/photo9.jpeg', text: 'You make life beautiful.' },
+    { img: 'assets/photo11.jpeg', text: 'Always here, always yours.' },
   ];
 
   const giftCount = 6;

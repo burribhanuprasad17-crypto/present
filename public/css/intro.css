@@ -1526,6 +1526,132 @@
    ACCESSIBILITY
    ============================================================ */
 
+/* ============================================================
+   CINEMATIC INTRO ANIMATION
+   ============================================================ */
+
+.bi-intro-cinematic {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.bi-intro-cinematic.active {
+  opacity: 1;
+}
+
+.bi-intro-cinematic.leaving {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.bi-cine-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 55%, #2a0e25 0%, #100711 60%, #050208 100%);
+}
+
+.bi-cine-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bi-cine-petal {
+  position: absolute;
+  bottom: -30px;
+  opacity: 0;
+  animation: cinePetalFloat linear forwards;
+}
+
+@keyframes cinePetalFloat {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(0.3);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-110vh) translateX(var(--drift, 30px)) rotate(360deg) scale(1);
+    opacity: 0;
+  }
+}
+
+.bi-cine-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.bi-cine-heart {
+  font-size: clamp(50px, 12vw, 90px);
+  color: #ff6ba6;
+  filter: drop-shadow(0 0 20px rgba(255, 107, 166, 0.7)) drop-shadow(0 0 60px rgba(255, 107, 166, 0.4));
+  opacity: 0;
+  transform: scale(0.3);
+  transition: opacity 1s ease 0.3s, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s;
+}
+
+.bi-intro-cinematic.active .bi-cine-heart {
+  opacity: 1;
+  transform: scale(1);
+  animation: cineHeartPulse 2s ease-in-out 1.5s infinite;
+}
+
+@keyframes cineHeartPulse {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.12); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.08); }
+}
+
+.bi-cine-line {
+  font-family: 'Cormorant Garamond', serif;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(16px, 3.5vw, 26px);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.bi-intro-cinematic.active .cine-line-1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 1.6s;
+}
+
+.bi-intro-cinematic.active .cine-line-2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 2.6s;
+}
+
+.bi-intro-cinematic.active .cine-line-3 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 3.4s;
+  color: #ff6ba6;
+  font-size: clamp(18px, 4vw, 30px);
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
   #birthday-intro *,
   #birthday-intro *::before,

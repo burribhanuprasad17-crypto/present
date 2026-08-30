@@ -1927,9 +1927,57 @@
   };
 
   /* ==========================================================
+     CINEMATIC INTRO ANIMATION
+     ========================================================== */
+
+  function startIntroAnimation() {
+    /* Create full-screen intro overlay */
+    const intro = create("div", "bi-intro-cinematic");
+    intro.innerHTML = `
+      <div class="bi-cine-bg"></div>
+      <div class="bi-cine-particles"></div>
+      <div class="bi-cine-content">
+        <div class="bi-cine-heart">♥</div>
+        <p class="bi-cine-line cine-line-1">Someone very special is about to enter…</p>
+        <p class="bi-cine-line cine-line-2">And this little world has been waiting.</p>
+        <p class="bi-cine-line cine-line-3">✨ ♥ ✨</p>
+      </div>
+    `;
+    host.appendChild(intro);
+
+    /* Trigger entrance animation on next frame */
+    requestAnimationFrame(() => {
+      intro.classList.add("active");
+    });
+
+    /* Spawn floating petals + sparkles */
+    const particleBox = intro.querySelector(".bi-cine-particles");
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const p = create("span", "bi-cine-petal");
+        p.textContent = ["🌸", "♥", "✦", "✨", "🌷"][Math.floor(Math.random() * 5)];
+        p.style.left = random(0, 100) + "%";
+        p.style.fontSize = random(14, 32) + "px";
+        p.style.animationDuration = random(4, 8) + "s";
+        p.style.setProperty("--drift", random(-60, 60));
+        particleBox.appendChild(p);
+      }, i * 200);
+    }
+
+    /* After animation, transition to first mission */
+    setTimeout(() => {
+      intro.classList.add("leaving");
+      setTimeout(() => {
+        intro.remove();
+        startOpening();
+      }, 800);
+    }, 5500);
+  }
+
+  /* ==========================================================
      START
      ========================================================== */
 
-  startOpening();
+  startIntroAnimation();
 
 })(window);

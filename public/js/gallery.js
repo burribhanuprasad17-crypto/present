@@ -73,21 +73,40 @@
     }
   }
 
-  /* ── Memory Tree — a few special photos hang from its branches ── */
+  /* ── Memory Trees — photos hang from branches of both trees ── */
   function renderMemoryTree() {
-    const holder = document.getElementById("tree-photos");
-    if (!holder) return;
-    const spots = [
-      { left: "8%",   top: "46%" }, { left: "72%", top: "42%" },
-      { left: "22%",  top: "62%" }, { left: "58%", top: "64%" },
-      { left: "41%",  top: "38%" }
+    const treeConfigs = [
+      {
+        holderId: "tree-photos",
+        spots: [
+          { left: "8%",   top: "46%" }, { left: "72%", top: "42%" },
+          { left: "22%",  top: "62%" }, { left: "58%", top: "64%" },
+          { left: "41%",  top: "38%" }
+        ],
+        slice: [0, 5]
+      },
+      {
+        holderId: "tree-photos-2",
+        spots: [
+          { left: "12%",  top: "44%" }, { left: "68%", top: "40%" },
+          { left: "30%",  top: "58%" }, { left: "55%", top: "62%" },
+          { left: "44%",  top: "36%" }
+        ],
+        slice: [5, 10]
+      }
     ];
-    memories.slice(0, Math.min(5, memories.length)).forEach((m, i) => {
-      const card = makeCard(m, memories.indexOf(m), true);
-      card.classList.add("in");                 // tree photos always visible
-      card.style.left = spots[i].left;
-      card.style.top = spots[i].top;
-      holder.appendChild(card);
+
+    treeConfigs.forEach(cfg => {
+      const holder = document.getElementById(cfg.holderId);
+      if (!holder) return;
+      const slice = memories.slice(cfg.slice[0], cfg.slice[1]);
+      slice.forEach((m, i) => {
+        const card = makeCard(m, memories.indexOf(m), true);
+        card.classList.add("in");
+        card.style.left = cfg.spots[i].left;
+        card.style.top = cfg.spots[i].top;
+        holder.appendChild(card);
+      });
     });
   }
 

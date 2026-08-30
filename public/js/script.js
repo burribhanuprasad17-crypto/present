@@ -34,7 +34,11 @@ const CONFIG = {
     { image: "images/photo9.jpeg", caption: "Time flies when hearts are happy." },
     { image: "images/photo10.jpeg", caption: "A page from our favourite story." },
     { image: "images/photo11.jpeg", caption: "Little moments, endless love." },
-    { image: "images/photo12.jpeg", caption: "And the best is yet to come…" }
+    { image: "images/photo12.jpeg", caption: "And the best is yet to come…" },
+    { image: "images/photo13.jpeg", caption: "You make ordinary days feel extraordinary." },
+    { image: "images/photo14.jpeg", caption: "A moment worth a thousand words." },
+    { image: "images/photo15.jpeg", caption: "These are the days we'll look back on." },
+    { image: "images/photo16.jpeg", caption: "And every chapter just gets better." }
   ],
 
   letter: {

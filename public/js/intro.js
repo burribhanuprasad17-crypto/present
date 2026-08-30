@@ -805,15 +805,16 @@
                 `;
                 setScene(next);
               }, 1000);
-            }
-          } else {
-            /* No match — flip back */
+            }          } else {
+            /* No match — shake, then flip back */
+            a.classList.add("wrong");
+            b.classList.add("wrong");
             setTimeout(() => {
-              a.classList.remove("flipped");
-              b.classList.remove("flipped");
+              a.classList.remove("flipped", "wrong");
+              b.classList.remove("flipped", "wrong");
               flipped = [];
               locked = false;
-            }, 800);
+            }, 900);
           }
         }
       });

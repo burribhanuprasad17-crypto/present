@@ -23,22 +23,26 @@ const CONFIG = {
 
   // Photos used by the gallery AND the home quote compositions (first 4).
   photos: [
-    { image: "images/photo1.jpeg", caption: "A beautiful memory ♥" },
-    { image: "images/photo2.jpeg", caption: "One of those moments worth remembering." },
-    { image: "images/photo3.jpeg", caption: "The day everything felt magical." },
-    { image: "images/photo4.jpeg", caption: "Laughter that never gets old." },
-    { image: "images/photo5.jpeg", caption: "A quiet moment, a loud heart." },
-    { image: "images/photo6.jpeg", caption: "Forever my favourite person." },
-    { image: "images/photo7.jpeg", caption: "Some smiles stay with you always." },
-    { image: "images/photo8.jpeg", caption: "Wrapped in warmth, just like this day." },
-    { image: "images/photo9.jpeg", caption: "Time flies when hearts are happy." },
-    { image: "images/photo10.jpeg", caption: "A page from our favourite story." },
-    { image: "images/photo11.jpeg", caption: "Little moments, endless love." },
-    { image: "images/photo12.jpeg", caption: "And the best is yet to come…" },
-    { image: "images/photo13.jpeg", caption: "You make ordinary days feel extraordinary." },
-    { image: "images/photo14.jpeg", caption: "A moment worth a thousand words." },
-    { image: "images/photo15.jpeg", caption: "These are the days we'll look back on." },
-    { image: "images/photo16.jpeg", caption: "And every chapter just gets better." }
+    { image: "images/photo1.jpeg", caption: "A beautiful smile that lights up every room ♥" },
+    { image: "images/photo2.jpeg", caption: "Grace in every glance." },
+    { image: "images/photo3.jpeg", caption: "Flowers in your hair, sunshine in your soul." },
+    { image: "images/photo4.jpeg", caption: "Standing tall, shining bright." },
+    { image: "images/photo5.jpeg", caption: "The garden couldn't compete with your smile." },
+    { image: "images/photo6.jpeg", caption: "A little mystery never hurt anyone." },
+    { image: "images/photo7.jpeg", caption: "Quiet moments, big dreams." },
+    { image: "images/photo8.jpeg", caption: "Blue as the sky, bright as your spirit." },
+    { image: "images/photo9.jpeg", caption: "Some moments are better together ♥" },
+    { image: "images/photo10.jpeg", caption: "Sweet celebrations and even sweeter memories." },
+    { image: "images/photo11.jpeg", caption: "Hello Kitty knows cuteness when she sees it." },
+    { image: "images/photo12.jpeg", caption: "A bow for the prettiest smile." },
+    { image: "images/photo13.jpeg", caption: "Eyes that tell a thousand stories." },
+    { image: "images/photo14.jpeg", caption: "Family is the heart of every memory ♥" },
+    { image: "images/photo15.jpeg", caption: "Together is the best place to be." },
+    { image: "images/photo16.jpeg", caption: "Candid moments hit different." },
+    { image: "images/photo17.jpeg", caption: "That golden hour glow." },
+    { image: "images/photo18.jpeg", caption: "Beauty that needs no filter." },
+    { image: "images/photo19.jpeg", caption: "Every angle, every moment, pure magic." },
+    { image: "images/photo20.jpeg", caption: "And this is only the beginning ♥" }
   ],
 
   letter: {

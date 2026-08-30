@@ -539,6 +539,8 @@ function buildGiftGarden() {
     box.style.animationDelay = rand(0, 2) + 's';
 
     const giftIcon = GIFT_ITEMS[Math.floor(rand(0, GIFT_ITEMS.length))];
+    /* Shuffle photos once per page load so each visit shows a different mix */
+    if (g === 0) GIFT_PHOTOS.sort(() => Math.random() - 0.5);
     const photo = GIFT_PHOTOS[g % GIFT_PHOTOS.length];
 
     box.innerHTML = `

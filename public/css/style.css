@@ -1227,6 +1227,10 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
 .gift-box.revealed .box-icon {
   animation: giftOpen 0.5s ease forwards;
 }
+.gift-box.revealed .box-label {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 @keyframes giftOpen {
   0% { transform: scale(1); }
   40% { transform: scale(1.3) rotate(-8deg); }

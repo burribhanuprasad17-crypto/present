@@ -505,14 +505,18 @@ function buildGiftGarden() {
 
   /* Random gift boxes — position changes every visit */
   const GIFT_ITEMS = ['🎁', '🎀', '💝', '🎊', '💌', '🪅', '🪩', '🎵'];
-  const GIFT_PHOTOS = [
-    { img: 'assets/photo1.jpeg', text: 'A cherished memory ♥' },
-    { img: 'assets/photo3.jpeg', text: 'One of our special days.' },
-    { img: 'assets/photo5.jpeg', text: 'A moment to treasure.' },
-    { img: 'assets/photo7.jpeg', text: 'Smile — this one is yours.' },
-    { img: 'assets/photo9.jpeg', text: 'You make life beautiful.' },
-    { img: 'assets/photo11.jpeg', text: 'Always here, always yours.' },
+  const GIFT_CAPTIONS = [
+    'A cherished memory ♥', 'One of our special days.', 'A moment to treasure.',
+    'Smile — this one is yours.', 'You make life beautiful.', 'Always here, always yours.',
+    'A little piece of us.', 'Thinking of you always ♥', 'You deserve the world.',
+    'My favourite moment.', 'A smile worth remembering.', 'This one is special to me.',
   ];
+  /* Pick 6 random unique photos from the full CONFIG array each visit */
+  const shuffled = [...CONFIG.photos].sort(() => Math.random() - 0.5);
+  const GIFT_PHOTOS = shuffled.slice(0, 6).map((p, i) => ({
+    img: p.image,
+    text: GIFT_CAPTIONS[i % GIFT_CAPTIONS.length],
+  }));
 
   const giftCount = 6;
   const usedPositions = [];
@@ -539,9 +543,7 @@ function buildGiftGarden() {
     box.style.animationDelay = rand(0, 2) + 's';
 
     const giftIcon = GIFT_ITEMS[Math.floor(rand(0, GIFT_ITEMS.length))];
-    /* Shuffle photos once per page load so each visit shows a different mix */
-    if (g === 0) GIFT_PHOTOS.sort(() => Math.random() - 0.5);
-    const photo = GIFT_PHOTOS[g % GIFT_PHOTOS.length];
+    const photo = GIFT_PHOTOS[g];
 
     box.innerHTML = `
       <span class="box-icon">${giftIcon}</span>

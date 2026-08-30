@@ -1567,27 +1567,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   background: radial-gradient(circle at 30% 30%, var(--blush), var(--cherry));
   border-radius: 70% 0 70% 0;
 }
-
-/* ── Mosaic Grid section ── */
-.mosaic-section { margin-top: 80px; text-align: center; padding: 0 16px; }
-.mosaic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px;
-  max-width: 900px;
-  margin: 20px auto 0;
-}
-.mosaic-grid .memory-card {
-  width: 100% !important;
-  transform: rotate(0deg) !important;
-  animation: none !important;
-}
-.mosaic-grid .memory-card .photo-frame {
-  padding: 8px 8px 42px;
-}
-.mosaic-grid .memory-card .caption {
-  font-size: 15px;
-  background: rgba(255,253,251,.9);
   padding: 5px 7px;
   border-radius: 6px;
   max-height: 2.8em;

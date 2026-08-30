@@ -1046,34 +1046,39 @@
 .bi-match-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  max-width: min(440px, 88vw);
-  margin: 20px auto 12px;
-  padding: 4px;
+  gap: 10px;
+  max-width: min(480px, 92vw);
+  width: 100%;
+  margin: 20px auto 14px;
+  padding: 0;
 }
 
 .bi-match-card {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 14px;
   cursor: pointer;
   perspective: 600px;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
 }
 
 .bi-match-face,
 .bi-match-back {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transition:
     transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity 0.35s ease,
     box-shadow 0.3s ease;
+  line-height: 1;
 }
 
 /* Unflipped face — deep wine card with a subtle pattern */
@@ -1083,10 +1088,11 @@
     linear-gradient(145deg, #2e1228 0%, #4a1e3e 50%, #351530 100%);
   border: 1.5px solid rgba(255, 107, 166, 0.22);
   color: rgba(255, 255, 255, 0.18);
-  font-size: clamp(18px, 4.5vw, 28px);
+  font-size: 28px;
   box-shadow:
     0 4px 14px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255,255,255,0.06);
+  z-index: 2;
 }
 
 /* Subtle shimmer line on unflipped cards */
@@ -1094,7 +1100,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   background: linear-gradient(
     105deg,
     transparent 38%,
@@ -1114,12 +1120,13 @@
   border: 1.5px solid rgba(255, 255, 255, 0.35);
   transform: rotateY(180deg);
   opacity: 0;
-  font-size: clamp(24px, 6vw, 36px);
+  font-size: 38px;
   filter: drop-shadow(0 2px 10px rgba(255, 107, 166, 0.55));
   box-shadow:
     0 6px 22px rgba(255, 61, 136, 0.4),
     inset 0 -2px 6px rgba(0,0,0,0.15),
     inset 0 2px 6px rgba(255,255,255,0.2);
+  z-index: 1;
 }
 
 .bi-match-card.flipped .bi-match-face {
@@ -1178,7 +1185,7 @@
     0 6px 22px rgba(0, 0, 0, 0.4),
     0 0 14px rgba(255, 107, 166, 0.2),
     inset 0 1px 0 rgba(255,255,255,0.08);
-  transform: translateY(-3px) scale(1.04);
+  transform: scale(1.06);
 }
 
 /* Score indicator */
@@ -1633,6 +1640,14 @@
   .bi-match-face,
   .bi-match-back {
     border-radius: 12px;
+  }
+
+  .bi-match-face {
+    font-size: 24px;
+  }
+
+  .bi-match-back {
+    font-size: 32px;
   }
 
   .bi-match-face::after {

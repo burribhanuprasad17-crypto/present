@@ -697,7 +697,7 @@
           <button
             class="bi-btn"
             type="button"
-            data-action="stars"
+            data-action="memory"
           >
             Continue 💕
           </button>
@@ -730,119 +730,94 @@
      SCENE 3a — STAR CATCHER
      ========================================================== */
 
-  function startStarCatcher() {
+  function startMemoryMatch() {
     const card = create("div", "bi-scene-card");
 
-    card.innerHTML = `
-      <p class="bi-eyebrow">Mission 3 ✨</p>
+    const EMOJIS = ["💖", "🌸", "💘", "🌙", "🦋", "✨"];
+    const PAIRS = 6;
+    let deck = [];
+    EMOJIS.forEach(e => { deck.push(e, e); });
+    /* Shuffle */
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(random(0, i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
 
-      <h1 class="bi-title" style="font-size:clamp(26px,5vw,42px)">
-        Catch the falling stars! ✨
+    card.innerHTML = `
+      <p class="bi-eyebrow">Mission 3 🧩</p>
+
+      <h1 class="bi-title" style="font-size:clamp(24px,5vw,38px)">
+        Match the pairs! 🧩
       </h1>
 
-      <div class="bi-star-hud">
-        <span class="bi-star-timer" data-star-timer>12s</span>
-        <span class="bi-star-count" data-star-count>0 / 8 caught</span>
-      </div>
-
-      <div class="bi-arena" data-star-arena>
-      </div>
-
-      <p class="bi-hold-hint" data-star-hint>
-        Click each star before it fades! ⚡
+      <p class="bi-hold-hint" data-match-hint>
+        Find all 6 matching pairs to proceed.
       </p>
+
+      <div class="bi-match-grid" data-match-grid>
+        ${deck.map((e, i) => `<div class="bi-match-card" data-match-card data-idx="${i}" data-emoji="${e}"><span class="bi-match-face">♥</span><span class="bi-match-back">${e}</span></div>`).join("")}
+      </div>
+
+      <p class="bi-match-score" data-match-score>0 / ${PAIRS} pairs</p>
     `;
 
     setScene(card);
 
-    const arena = $("[data-star-arena]", card);
-    const timerEl = $("[data-star-timer]", card);
-    const countEl = $("[data-star-count]", card);
-    const hintEl = $("[data-star-hint]", card);
-    let caught = 0;
-    const needed = 8;
-    let timeLeft = 12;
-    let gameOver = false;
-    const spawnedStars = [];
+    const grid = $("[data-match-grid]", card);
+    const hintEl = $("[data-match-hint]", card);
+    const scoreEl = $("[data-match-score]", card);
+    const cards = $$("[data-match-card]", card);
+    let flipped = [];
+    let locked = false;
+    let matched = 0;
 
-    const timerInterval = setInterval(() => {
-      if (gameOver) return;
-      timeLeft--;
-      timerEl.textContent = timeLeft + "s";
-      if (timeLeft <= 4) timerEl.style.color = "#ff5a5a";
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        gameOver = true;
-        hintEl.textContent = "Time's up! Let's try again 😅";
-        spawnedStars.forEach(s => s.remove());
-        setTimeout(() => startStarCatcher(), 1500);
-      }
-    }, 1000);
+    cards.forEach(c => {
+      c.addEventListener("click", () => {
+        if (locked || c.classList.contains("flipped") || c.classList.contains("matched")) return;
+        c.classList.add("flipped");
+        flipped.push(c);
 
-    function spawnStar() {
-      if (gameOver) return;
-      const star = create("span", "bi-caught-star", "⭐");
-      const size = random(28, 42);
-      star.style.fontSize = size + "px";
-      star.style.left = random(8, 85) + "%";
-      star.style.top = "-40px";
-      star.style.opacity = "0";
-      arena.appendChild(star);
-      spawnedStars.push(star);
-
-      const dur = random(2800, 4200);
-      const anim = star.animate([
-        { transform: "translateY(0) rotate(0deg) scale(0.4)", opacity: 0 },
-        { opacity: 1, offset: 0.12 },
-        { transform: `translateY(${arena.clientHeight + 60}px) rotate(${random(180,360)}deg) scale(1)`, opacity: 0 }
-      ], { duration: dur, easing: "linear" });
-
-      function onCatch(e) {
-        e.preventDefault();
-        if (gameOver || star.dataset.caught) return;
-        star.dataset.caught = "true";
-        caught++;
-        countEl.textContent = caught + " / " + needed + " caught";
-        star.style.filter = "drop-shadow(0 0 18px gold)";
-        star.animate([
-          { transform: "scale(1)", opacity: 1 },
-          { transform: "scale(2.2)", opacity: 0 }
-        ], { duration: 400, easing: "ease-out" }).onfinish = () => star.remove();
-        createBurst(arena, star.offsetLeft, star.offsetTop, 8);
-        if (caught >= needed && !gameOver) {
-          gameOver = true;
-          clearInterval(timerInterval);
-          spawnedStars.forEach(s => { try { s.remove(); } catch(e){} });
-          hintEl.textContent = "ALL CAUGHT! ✨";
-          setTimeout(() => {
-            const next = create("div", "bi-scene-card");
-            next.innerHTML = `
-              <p class="bi-eyebrow">Incredible reflexes! ✨</p>
-              <h1 class="bi-title" style="font-size:clamp(24px,5vw,38px)">
-                Every star you caught was worth it.
-              </h1>
-              <p class="bi-line small">One more challenge ahead...</p>
-              <button class="bi-btn" type="button" data-action="balloon">
-                Inflate the heart 🎈
-              </button>
-            `;
-            setScene(next);
-          }, 900);
+        if (flipped.length === 2) {
+          locked = true;
+          const [a, b] = flipped;
+          if (a.dataset.emoji === b.dataset.emoji) {
+            /* Match found */
+            a.classList.add("matched");
+            b.classList.add("matched");
+            matched++;
+            scoreEl.textContent = matched + " / " + PAIRS + " pairs";
+            flipped = [];
+            locked = false;
+            if (matched >= PAIRS) {
+              hintEl.textContent = "ALL MATCHED! 🎉";
+              hintEl.style.color = "#ff6ba6";
+              setTimeout(() => {
+                const next = create("div", "bi-scene-card");
+                next.innerHTML = `
+                  <p class="bi-eyebrow">Incredible memory! 🧩✨</p>
+                  <h1 class="bi-title" style="font-size:clamp(24px,5vw,38px)">
+                    You remembered every single one.
+                  </h1>
+                  <p class="bi-line small">One more challenge ahead...</p>
+                  <button class="bi-btn" type="button" data-action="balloon">
+                    Inflate the heart 🎈
+                  </button>
+                `;
+                setScene(next);
+              }, 1000);
+            }
+          } else {
+            /* No match — flip back */
+            setTimeout(() => {
+              a.classList.remove("flipped");
+              b.classList.remove("flipped");
+              flipped = [];
+              locked = false;
+            }, 800);
+          }
         }
-      }
-
-      star.addEventListener("click", onCatch);
-      star.addEventListener("touchend", onCatch, { passive: false });
-
-      anim.onfinish = () => {
-        if (!star.dataset.caught) star.remove();
-      };
-
-      const nextDelay = random(350, 900);
-      setTimeout(spawnStar, nextDelay);
-    }
-
-    setTimeout(spawnStar, 600);
+      });
+    });
   }
 
   /* ==========================================================
@@ -1873,8 +1848,8 @@
           startBloomFlower();
           break;
 
-        case "stars":
-          startStarCatcher();
+        case "memory":
+          startMemoryMatch();
           break;
 
         case "balloon":

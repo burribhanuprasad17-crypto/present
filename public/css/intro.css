@@ -1040,39 +1040,85 @@
 }
 
 /* ============================================================
-   STAR CATCHER
+   MEMORY MATCH
    ============================================================ */
 
-.bi-star-hud {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  margin-top: 14px;
-  font-size: 15px;
-  font-weight: 600;
+.bi-match-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: min(400px, 85vw);
+  margin: 18px auto 10px;
 }
 
-.bi-star-timer {
-  color: #ffb3d2;
-  font-variant-numeric: tabular-nums;
-}
-
-.bi-star-count {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.bi-caught-star {
-  position: absolute;
+.bi-match-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 14px;
   cursor: pointer;
+  perspective: 400px;
   user-select: none;
-  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-  transition: filter 0.15s ease;
-  z-index: 2;
 }
 
-.bi-caught-star:hover {
-  filter: drop-shadow(0 0 18px rgba(255, 215, 0, 1)) brightness(1.3);
-  transform: scale(1.15);
+.bi-match-face,
+.bi-match-back {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-size: clamp(20px, 5vw, 30px);
+  backface-visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+.bi-match-face {
+  background: linear-gradient(135deg, #3a1a35, #5a2050);
+  border: 1px solid rgba(255, 107, 166, 0.25);
+  color: rgba(255, 255, 255, 0.3);
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+.bi-match-back {
+  background: linear-gradient(135deg, #ff6ba6, #ff4088);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: rotateY(180deg);
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(255, 107, 166, 0.5));
+}
+
+.bi-match-card.flipped .bi-match-face {
+  transform: rotateY(180deg);
+  opacity: 0;
+}
+
+.bi-match-card.flipped .bi-match-back {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+.bi-match-card.matched .bi-match-back {
+  background: linear-gradient(135deg, #ff4088, #ffd700);
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.6));
+  animation: biMatchPop 0.5s ease;
+}
+
+@keyframes biMatchPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.bi-match-card:hover:not(.flipped):not(.matched) .bi-match-face {
+  border-color: rgba(255, 107, 166, 0.5);
+  background: linear-gradient(135deg, #4a2245, #6a2860);
+}
+
+.bi-match-score {
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
 }
 
 /* ============================================================
@@ -1503,9 +1549,10 @@
     width: 100%;
   }
 
-  .bi-star-hud {
-    flex-direction: column;
+  .bi-match-grid {
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+    max-width: 90vw;
   }
 
   .bi-balloon-heart {

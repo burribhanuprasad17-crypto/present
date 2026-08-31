@@ -213,3 +213,48 @@
     touchEndX = null;
   }, { passive: true });
 })();
+
+/* ══════════ Birthday Cake — sparkles & scroll reveal ══════════ */
+(function initCake() {
+  const cakeSection = document.getElementById("birthday-cake");
+  if (!cakeSection) return;
+
+  const sparklesContainer = document.getElementById("cake-sparkles");
+  const rand = (min, max) => Math.random() * (max - min) + min;
+  const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Generate floating sparkles around the cake */
+  function buildCakeSparkles() {
+    if (REDUCED_MOTION || !sparklesContainer) return;
+    for (let i = 0; i < 18; i++) {
+      const s = document.createElement("span");
+      s.className = "cake-sparkle";
+      s.style.left = rand(5, 95) + "%";
+      s.style.top = rand(5, 90) + "%";
+      s.style.animationDelay = rand(0, 3).toFixed(1) + "s";
+      s.style.animationDuration = rand(2.5, 4.5).toFixed(1) + "s";
+      s.style.width = s.style.height = rand(3, 6) + "px";
+      sparklesContainer.appendChild(s);
+    }
+  }
+
+  buildCakeSparkles();
+
+  /* Scroll-triggered reveal */
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            cakeSection.classList.add("revealed");
+            observer.unobserve(cakeSection);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(cakeSection);
+  } else {
+    cakeSection.classList.add("revealed");
+  }
+})();

@@ -1798,6 +1798,22 @@
    ACCESSIBILITY
    ============================================================ */
 
+/* ============================================================
+   CURSOR HEART TRAIL
+   ============================================================ */
+.bi-cursor-heart {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  font-size: 16px;
+  color: #f6b6c8;
+  text-shadow: 0 0 8px rgba(246, 182, 200, 0.8);
+  will-change: transform, opacity;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   #birthday-intro *,
   #birthday-intro *::before,

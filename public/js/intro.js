@@ -1951,6 +1951,30 @@
   }
 
   /* ==========================================================
+     CURSOR HEART TRAIL
+     ========================================================== */
+  (function initCursorTrail() {
+    var rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (rm || !window.matchMedia("(pointer: fine)").matches) return;
+    var last = 0;
+    document.addEventListener("pointermove", function (e) {
+      var now = performance.now();
+      if (now - last < 120) return;
+      last = now;
+      var h = document.createElement("span");
+      h.className = "bi-cursor-heart";
+      h.textContent = Math.random() > 0.75 ? "\u2728" : "\u2665";
+      h.style.left = e.clientX + "px";
+      h.style.top = e.clientY + "px";
+      document.body.appendChild(h);
+      h.animate([
+        { transform: "translate(-50%,-50%) scale(1)", opacity: 0.8 },
+        { transform: "translate(-50%,-50%) translateY(-34px) scale(0.4)", opacity: 0 }
+      ], { duration: 950, easing: "ease-out" }).onfinish = function () { h.remove(); };
+    }, { passive: true });
+  })();
+
+  /* ==========================================================
      START
      ========================================================== */
 

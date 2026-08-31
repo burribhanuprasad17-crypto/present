@@ -214,47 +214,92 @@
   }, { passive: true });
 })();
 
-/* ══════════ Birthday Cake — sparkles & scroll reveal ══════════ */
+/* ══════════ Birthday Cake — cinematic reveal ══════════ */
 (function initCake() {
   const cakeSection = document.getElementById("birthday-cake");
   if (!cakeSection) return;
 
   const sparklesContainer = document.getElementById("cake-sparkles");
+  const confettiContainer = document.getElementById("cake-confetti");
   const rand = (min, max) => Math.random() * (max - min) + min;
   const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let revealed = false;
 
-  /* Generate floating sparkles around the cake */
+  /* ── Sparkles ── */
   function buildCakeSparkles() {
     if (REDUCED_MOTION || !sparklesContainer) return;
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 22; i++) {
       const s = document.createElement("span");
-      s.className = "cake-sparkle";
+      s.className = "cake-sparkle " + (Math.random() > 0.5 ? "gold" : "pink");
       s.style.left = rand(5, 95) + "%";
-      s.style.top = rand(5, 90) + "%";
-      s.style.animationDelay = rand(0, 3).toFixed(1) + "s";
-      s.style.animationDuration = rand(2.5, 4.5).toFixed(1) + "s";
-      s.style.width = s.style.height = rand(3, 6) + "px";
+      s.style.top = rand(10, 85) + "%";
+      s.style.setProperty("--sdd", rand(0, 3).toFixed(1) + "s");
+      s.style.setProperty("--sd", rand(2.5, 4.5).toFixed(1) + "s");
+      s.style.setProperty("--sy", "-" + rand(20, 50).toFixed(0) + "px");
+      const size = rand(3, 7);
+      s.style.width = size + "px";
+      s.style.height = size + "px";
       sparklesContainer.appendChild(s);
     }
   }
 
-  buildCakeSparkles();
+  /* ── Confetti burst ── */
+  function buildConfetti() {
+    if (REDUCED_MOTION || !confettiContainer) return;
+    const colors = ["#ff6b9d", "#ffd54f", "#c8b6ff", "#ffb3d0", "#ffe4a8", "#ff8faa", "#a8d8ff"];
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement("span");
+      p.className = "confetti-piece";
+      p.style.left = "50%";
+      p.style.top = "25%";
+      p.style.setProperty("--cc", colors[Math.floor(rand(0, colors.length))]);
+      p.style.setProperty("--cx", rand(-180, 180).toFixed(0) + "px");
+      p.style.setProperty("--cy", rand(-250, -80).toFixed(0) + "px");
+      p.style.setProperty("--cr2", rand(0, 360).toFixed(0) + "deg");
+      p.style.setProperty("--cd", rand(2, 3.5).toFixed(1) + "s");
+      p.style.setProperty("--cfd", rand(2.8, 3.4).toFixed(1) + "s");
+      const w = rand(5, 10);
+      p.style.setProperty("--cw", w + "px");
+      p.style.setProperty("--ch", rand(5, 12) + "px");
+      p.style.setProperty("--cr", Math.random() > 0.5 ? "50%" : "2px");
+      confettiContainer.appendChild(p);
+    }
+  }
 
-  /* Scroll-triggered reveal */
+  /* ── Sequential candle ignition ── */
+  function igniteCandles() {
+    const candles = cakeSection.querySelectorAll(".candle");
+    candles.forEach((c, i) => {
+      setTimeout(() => {
+        c.classList.add("ignited");
+      }, 2800 + i * 200);
+    });
+  }
+
+  /* ── Scroll reveal ── */
+  function doReveal() {
+    if (revealed) return;
+    revealed = true;
+    cakeSection.classList.add("revealed");
+    buildCakeSparkles();
+    buildConfetti();
+    igniteCandles();
+  }
+
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            cakeSection.classList.add("revealed");
+            doReveal();
             observer.unobserve(cakeSection);
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
     observer.observe(cakeSection);
   } else {
-    cakeSection.classList.add("revealed");
+    doReveal();
   }
 })();

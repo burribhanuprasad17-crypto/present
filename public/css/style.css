@@ -1571,10 +1571,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   background: radial-gradient(circle at 30% 30%, var(--blush), var(--cherry));
   border-radius: 70% 0 70% 0;
 }
-  padding: 5px 7px;
-  border-radius: 6px;
-  max-height: 2.8em;
-}
 
 /* ── Memory Tree section ── */
 .tree-section { position: relative; margin-top: 130px; text-align: center; }
@@ -1677,8 +1673,22 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   transition: opacity 1.2s ease 1.5s, transform 1.2s ease 1.5s;
 }
 .cake-section.revealed .cake-sub { opacity: 1; transform: none; }
-
-/* ── Candles ── */
+.cake-wrapper {
+  position: relative;
+  display: inline-block;
+  padding: 40px 60px 20px;
+}
+.cake {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0; transform: scale(.5) translateY(60px);
+  transition: opacity 1s ease .3s, transform 1.2s cubic-bezier(.22,1,.36,1) .3s;
+}
+.cake-section.revealed .cake {
+  opacity: 1; transform: scale(1) translateY(0);
+}
 .cake-candles {
   display: flex;
   justify-content: center;
@@ -1745,8 +1755,9 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   100% { transform: translateX(-50%) scaleY(.96) scaleX(1.04) rotate(-1.5deg); opacity: 1; }
 }
 @keyframes glowPulse {
-
-/* ── Cake tiers ── */
+  0% { opacity: .6; transform: translateX(-50%) scale(1); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
 .cake-tier {
   position: relative;
   border-radius: 12px 12px 16px 16px;
@@ -1773,8 +1784,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   z-index: 0;
   box-shadow: 0 12px 36px rgba(142,49,87,.4);
 }
-
-/* ── Frosting drips ── */
 .frosting {
   position: absolute;
   top: -6px; left: 0; right: 0;
@@ -1813,8 +1822,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
 .tier-bottom .drip:nth-child(8) { left: 76%; height: 24px; }
 .tier-bottom .drip:nth-child(9) { left: 88%; height: 18px; }
 .tier-bottom .drip:nth-child(10) { left: 50%; height: 20px; width: 10px; }
-
-/* ── Tier decorations ── */
 .tier-decorations {
   position: absolute;
   bottom: 10px; left: 0; right: 0;
@@ -1839,8 +1846,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   font-size: 18px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
 }
-
-/* ── Cake plate ── */
 .cake-plate {
   width: 260px; height: 14px;
   background: linear-gradient(180deg, #fdeef3, #f5d5e0);
@@ -1848,8 +1853,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   margin-top: -2px;
   box-shadow: 0 8px 20px rgba(142,49,87,.25);
 }
-
-/* ── Cake sparkles ── */
 .cake-sparkles {
   position: absolute; inset: 0;
   pointer-events: none;
@@ -1867,8 +1870,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   0%, 100% { opacity: 0; transform: translateY(0) scale(.4); }
   50% { opacity: 1; transform: translateY(-20px) scale(1); }
 }
-
-/* ── Cake responsive ── */
 @media (max-width: 600px) {
   .cake-candles { gap: 18px; }
   .candle { width: 8px; height: 34px; }
@@ -1879,25 +1880,6 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   .cake-plate { width: 200px; }
   .cherry { font-size: 13px; }
   .sweet { font-size: 15px; }
-}
-  0% { opacity: .6; transform: translateX(-50%) scale(1); }
-  100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
-}
-.cake-wrapper {
-  position: relative;
-  display: inline-block;
-  padding: 40px 60px 20px;
-}
-.cake {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  opacity: 0; transform: scale(.5) translateY(60px);
-  transition: opacity 1s ease .3s, transform 1.2s cubic-bezier(.22,1,.36,1) .3s;
-}
-.cake-section.revealed .cake {
-  opacity: 1; transform: scale(1) translateY(0);
 }
 /* ── Grand finale ── */
 .finale {

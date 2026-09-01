@@ -513,9 +513,9 @@ function buildGiftGarden() {
   ];
   /* Pick 6 random unique photos from the full CONFIG array each visit */
   const shuffled = [...CONFIG.photos].sort(() => Math.random() - 0.5);
-  const GIFT_PHOTOS = shuffled.slice(0, 6).map((p, i) => ({
+  const GIFT_PHOTOS = shuffled.slice(0, 6).map((p) => ({
     img: p.image,
-    text: GIFT_CAPTIONS[i % GIFT_CAPTIONS.length],
+    text: p.caption,
   }));
 
   const giftCount = 6;

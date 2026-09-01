@@ -1675,6 +1675,26 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   z-index: 1;
 }
 
+/* ── Intro text ── */
+.bc-wait, .bc-one-more {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(28px, 5vw, 44px);
+  color: var(--warm-white);
+  text-shadow: 0 0 30px rgba(246,182,200,.85), 0 2px 20px rgba(75,25,48,.4);
+  opacity: 0;
+  transform: translateY(20px) scale(.95);
+  transition: opacity 1.2s ease, transform 1.2s cubic-bezier(.22,1,.36,1);
+  position: absolute;
+  top: 12%;
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+}
+.bc-wait.show { opacity: 1; transform: translateY(0) scale(1); }
+.bc-one-more.show { opacity: 1; transform: translateY(0) scale(1); }
+.bc-wait.hide, .bc-one-more.hide { opacity: 0; transform: translateY(-16px) scale(1.04); pointer-events: none; }
 /* ── Ambient candlelight ── */
 .bc-ambient {
   position: absolute;
@@ -2321,6 +2341,7 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   .bc-blow-btn { animation: none !important; transition: none; opacity: 1 !important; transform: none !important; }
   .bc-blow-btn.show { transform: none !important; }
   .bc-made-for, .bc-make-wish, .bc-wish-text { transition: none; opacity: 1 !important; transform: none !important; }
+  .bc-wait, .bc-one-more { transition: none; opacity: 1 !important; transform: none !important; }
   .bc-floater { animation: none !important; }
   .bc-smoke i { animation: none !important; }
   .bc-ambient { animation: none !important; }

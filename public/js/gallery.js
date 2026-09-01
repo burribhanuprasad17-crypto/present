@@ -240,9 +240,9 @@
     tier3: document.getElementById('bc-tier-3'),
     candles: document.getElementById('bc-candles'),
     plate: document.querySelector('.bc-plate'),
-    plateShadow: document.querySelector('.bc-plate-shadow'),
-    creamRings: document.querySelectorAll('.bc-cream-ring'),
-    decoRows: document.querySelectorAll('.bc-deco-row'),
+    plateShadow: document.querySelector('.bc-plate-sh'),
+    creamRings: document.querySelectorAll('.bc-cream-r'),
+    decoRows: document.querySelectorAll('.bc-deco'),
     madeFor: document.getElementById('bc-made-for'),
     makeWish: document.getElementById('bc-make-wish'),
     blowBtn: document.getElementById('bc-blow-btn'),
@@ -429,10 +429,11 @@
     // Phase 3: Blow out candles one by one
     for (let i = 0; i < candles.length; i++) {
       candles[i].classList.remove('lit');
-      candles[i].classList.add('blown-out');
+      candles[i].classList.add('blown');
       await wait(RM ? 100 : 220);
-      // Show smoke
-      candles[i].classList.add('smoking');
+      // Show smoke with staggered delays
+      const smokeIdx = (i % 3) + 1;
+      candles[i].classList.add('smoking', 'smoke' + smokeIdx);
     }
 
     // Phase 4: Hide ambient glow
@@ -459,7 +460,7 @@
     await wait(RM ? 100 : 2200);
 
     // Clean up smoke
-    candles.forEach(c => c.classList.remove('smoking', 'blown-out'));
+    candles.forEach(c => c.classList.remove('smoking', 'blown', 'smoke1', 'smoke2', 'smoke3'));
 
     // Smooth scroll to the existing finale
     const finale = document.getElementById('finale');

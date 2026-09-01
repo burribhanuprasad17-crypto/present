@@ -214,3 +214,271 @@
   }, { passive: true });
 })();
 
+/* ══════════════════════════════════════════════════════════
+   BIRTHDAY CAKE EXPERIENCE
+   Cinematic build, candle ignition, and blow-out interaction.
+   ══════════════════════════════════════════════════════════ */
+(function BirthdayCakeExperience() {
+  const section = document.getElementById('birthday-cake');
+  const stage = document.getElementById('bc-stage');
+  if (!section || !stage) return;
+
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rand = (a, b) => Math.random() * (b - a) + a;
+  const CANDLE_COUNT = 6;
+  let played = false;
+
+  /* ── Elements ── */
+  const els = {
+    wait: document.getElementById('bc-wait'),
+    oneMore: document.getElementById('bc-one-more'),
+    ambient: document.getElementById('bc-ambient'),
+    cakeWrap: document.getElementById('bc-cake-wrap'),
+    cake: document.getElementById('bc-cake'),
+    tier1: document.getElementById('bc-tier-1'),
+    tier2: document.getElementById('bc-tier-2'),
+    tier3: document.getElementById('bc-tier-3'),
+    candles: document.getElementById('bc-candles'),
+    plate: document.querySelector('.bc-plate'),
+    plateShadow: document.querySelector('.bc-plate-shadow'),
+    creamRings: document.querySelectorAll('.bc-cream-ring'),
+    decoRows: document.querySelectorAll('.bc-deco-row'),
+    madeFor: document.getElementById('bc-made-for'),
+    makeWish: document.getElementById('bc-make-wish'),
+    blowBtn: document.getElementById('bc-blow-btn'),
+    wishText: document.getElementById('bc-wish-text'),
+    floaters: document.getElementById('bc-floaters'),
+  };
+
+  const candles = section.querySelectorAll('.bc-candle');
+
+  /* ── Helpers ── */
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function spawnFloater(emoji) {
+    const f = document.createElement('span');
+    f.className = 'bc-floater';
+    f.textContent = emoji;
+    f.style.left = rand(10, 90) + '%';
+    f.style.top = rand(10, 80) + '%';
+    f.style.setProperty('--tx', rand(-30, 30) + 'px');
+    f.style.setProperty('--ty', rand(-40, -15) + 'px');
+    f.style.setProperty('--dur', rand(2.5, 4.5) + 's');
+    f.style.setProperty('--del', rand(0, 2) + 's');
+    els.floaters.appendChild(f);
+    requestAnimationFrame(() => f.classList.add('show'));
+  }
+
+  function spawnPetals(count) {
+    const container = document.getElementById('petals-layer');
+    if (!container || RM) return;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const p = document.createElement('span');
+        p.className = 'petal';
+        const size = rand(8, 16);
+        const shapes = ['70% 0 70% 0', '60% 0 60% 0'];
+        p.style.cssText = `left:${rand(0,100)}%;top:-24px;width:${size}px;height:${size}px;
+          border-radius:${shapes[Math.floor(rand(0,2))]};
+          background:radial-gradient(circle at 30% 30%, #FCE7ED, #E88BA8 78%);
+          opacity:${rand(.5,.9)};`;
+        container.appendChild(p);
+        p.animate([
+          { transform: 'translate(0,-24px) rotate(0deg)', opacity: 0 },
+          { opacity: .8, offset: .08 },
+          { transform: `translate(${rand(-120,120)}px, ${window.innerHeight + 40}px) rotate(${rand(360,800)}deg)`, opacity: .05 }
+        ], { duration: rand(7000, 14000), easing: 'cubic-bezier(.45,.05,.55,.95)' }
+        ).onfinish = () => p.remove();
+      }, i * 600);
+    }
+  }
+
+  function spawnHearts(count) {
+    if (RM) return;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const h = document.createElement('span');
+        h.className = 'cursor-heart';
+        h.textContent = Math.random() > .5 ? '♥' : '❀';
+        h.style.left = rand(20, 80) + '%';
+        h.style.top = '60%';
+        h.style.fontSize = rand(12, 20) + 'px';
+        document.body.appendChild(h);
+        h.animate([
+          { transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${rand(-60,60)}px), calc(-50% - ${rand(80,180)}px)) scale(1) rotate(${rand(-30,30)}deg)`, opacity: 0 }
+        ], { duration: rand(1400, 2200), easing: 'ease-out' }).onfinish = () => h.remove();
+      }, i * 200);
+    }
+  }
+
+  /* ── Phase 1: Intro text ── */
+  async function phaseIntro() {
+    if (RM) { els.wait.style.opacity = 1; els.wait.style.transform = 'none'; els.oneMore.style.opacity = 1; els.oneMore.style.transform = 'none'; return; }
+    els.wait.classList.add('show');
+    await wait(1800);
+    els.wait.classList.add('hide');
+    await wait(600);
+    els.oneMore.classList.add('show');
+    await wait(1600);
+    els.oneMore.classList.add('hide');
+    await wait(600);
+  }
+
+  /* ── Phase 2: Cake wrapper appears, plate builds ── */
+  async function phaseCakeAppear() {
+    els.cakeWrap.classList.add('show');
+    await wait(RM ? 100 : 800);
+    els.plate.classList.add('build');
+    els.plateShadow.classList.add('build');
+    await wait(RM ? 100 : 500);
+  }
+
+  /* ── Phase 3: Build tiers bottom to top ── */
+  async function phaseTiers() {
+    // Tier 1
+    els.tier1.classList.add('build');
+    await wait(RM ? 100 : 700);
+    // Cream ring 1
+    els.creamRings[0]?.classList.add('build');
+    await wait(RM ? 100 : 400);
+    // Tier 2
+    els.tier2.classList.add('build');
+    await wait(RM ? 100 : 600);
+    // Cream ring 2
+    els.creamRings[1]?.classList.add('build');
+    await wait(RM ? 100 : 400);
+    // Tier 3
+    els.tier3.classList.add('build');
+    await wait(RM ? 100 : 500);
+  }
+
+  /* ── Phase 4: Decorations appear ── */
+  async function phaseDecorations() {
+    // Add each deco row one by one
+    for (const row of els.decoRows) {
+      row.classList.add('build');
+      await wait(RM ? 100 : 350);
+    }
+    await wait(RM ? 100 : 300);
+  }
+
+  /* ── Phase 5: Place candles one by one ── */
+  async function phaseCandles() {
+    for (let i = 0; i < candles.length; i++) {
+      candles[i].classList.add('place');
+      await wait(RM ? 100 : 300);
+    }
+    await wait(RM ? 100 : 400);
+  }
+
+  /* ── Phase 6: Light candles one by one ── */
+  async function phaseIgnite() {
+    for (let i = 0; i < candles.length; i++) {
+      candles[i].classList.add('lit');
+      await wait(RM ? 100 : 280);
+    }
+    // Show ambient glow after all lit
+    els.ambient.classList.add('show');
+    await wait(RM ? 100 : 600);
+  }
+
+  /* ── Phase 7: Reveal text + button ── */
+  async function phaseReveal() {
+    els.madeFor.classList.add('show');
+    // Spawn floating decorations
+    const emojis = ['🌸', '♥', '✨', '🌷', '💕', '✦', '🌺'];
+    for (let i = 0; i < 8; i++) {
+      spawnFloater(emojis[i % emojis.length]);
+    }
+    spawnPetals(4);
+    await wait(RM ? 100 : 1400);
+    els.makeWish.classList.add('show');
+    await wait(RM ? 100 : 1200);
+    els.blowBtn.hidden = false;
+    requestAnimationFrame(() => els.blowBtn.classList.add('show'));
+  }
+
+  /* ── Full build sequence ── */
+  async function buildCake() {
+    await phaseIntro();
+    await phaseCakeAppear();
+    await phaseTiers();
+    await phaseDecorations();
+    await phaseCandles();
+    await phaseIgnite();
+    await phaseReveal();
+  }
+
+  /* ── Blow-out sequence ── */
+  let blowing = false;
+
+  async function blowCandles() {
+    if (blowing) return;
+    blowing = true;
+    els.blowBtn.disabled = true;
+
+    // Phase 1: Button text changes
+    els.blowBtn.textContent = 'Make a wish... ♥';
+    await wait(1200);
+
+    // Phase 2: Breeze effect — flames lean
+    els.candles.classList.add('breeze');
+    await wait(600);
+
+    // Phase 3: Blow out candles one by one
+    for (let i = 0; i < candles.length; i++) {
+      candles[i].classList.remove('lit');
+      candles[i].classList.add('blown-out');
+      await wait(RM ? 100 : 220);
+      // Show smoke
+      candles[i].classList.add('smoking');
+    }
+
+    // Phase 4: Hide ambient glow
+    els.ambient.classList.remove('show');
+
+    await wait(RM ? 100 : 1200);
+
+    // Phase 5: Wish messages
+    els.wishText.textContent = 'Wish made? ✨';
+    els.wishText.classList.add('show');
+    spawnHearts(8);
+    spawnPetals(6);
+
+    await wait(RM ? 100 : 2200);
+
+    els.wishText.classList.remove('show');
+    await wait(500);
+
+    els.wishText.textContent = 'Good. ♥';
+    els.wishText.classList.add('show');
+    spawnHearts(12);
+    spawnPetals(10);
+
+    await wait(RM ? 100 : 2200);
+
+    // Clean up smoke
+    candles.forEach(c => c.classList.remove('smoking', 'blown-out'));
+
+    // Smooth scroll to the existing finale
+    const finale = document.getElementById('finale');
+    if (finale) {
+      finale.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+    }
+  }
+
+  /* ── Event binding ── */
+  els.blowBtn.addEventListener('click', blowCandles);
+
+  /* ── Intersection Observer — play once when visible ── */
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !played) {
+      played = true;
+      observer.disconnect();
+      buildCake();
+    }
+  }, { threshold: 0.25 });
+  observer.observe(section);
+})();
+

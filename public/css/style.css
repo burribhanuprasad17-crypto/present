@@ -1649,6 +1649,714 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   line-height: 1.8; color: #9c5673;
   text-align: center;
 }
+/* ═══════════════════════════════════════════════════════════
+   BIRTHDAY CAKE REVEAL · namespace .bc-*
+   A realistic 3-tier cake with candles, frosting, decorations
+   and a cinematic build + blow-out animation sequence.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Section ── */
+.bc-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px 100px;
+  overflow: hidden;
+}
+.bc-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* ── Intro text ── */
+.bc-wait, .bc-one-more {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(26px, 5vw, 42px);
+  color: var(--warm-white);
+  text-shadow: 0 0 24px rgba(246,182,200,.8);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  position: absolute;
+  top: 15%;
+  text-align: center;
+  width: 100%;
+}
+.bc-wait.show { opacity: 1; transform: translateY(0); }
+.bc-one-more.show { opacity: 1; transform: translateY(0); }
+.bc-wait.hide, .bc-one-more.hide { opacity: 0; transform: translateY(-12px); }
+
+/* ── Ambient glow ── */
+.bc-ambient {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,200,140,.12) 0%, rgba(255,160,100,.06) 40%, transparent 70%);
+  opacity: 0;
+  transition: opacity 2s ease;
+  pointer-events: none;
+  animation: bcAmbientPulse 4s ease-in-out infinite;
+}
+.bc-ambient.show { opacity: 1; }
+@keyframes bcAmbientPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.08); }
+}
+
+/* ── Cake wrapper ── */
+.bc-cake-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  opacity: 0;
+  transform: translateY(60px) scale(.85);
+  transition: opacity 1.4s ease, transform 1.4s cubic-bezier(.22,1,.36,1);
+}
+.bc-cake-wrap.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Cake container ── */
+.bc-cake {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Tiers (shared) ── */
+.bc-tier {
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px) scaleY(.6);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1);
+}
+.bc-tier.build {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+.bc-tier-front {
+  position: relative;
+  border-radius: 8px 8px 14px 14px;
+  z-index: 2;
+}
+.bc-tier-side-l, .bc-tier-side-r {
+  position: absolute;
+  top: 0;
+  width: 16px;
+  height: 100%;
+  border-radius: 8px 0 0 14px;
+  z-index: 1;
+}
+.bc-tier-side-l { left: -14px; }
+.bc-tier-side-r { right: -14px; border-radius: 0 8px 14px 0; }
+.bc-tier-top {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  border-radius: 4px 4px 0 0;
+  z-index: 3;
+}
+
+/* ── Tier 1 — bottom (widest) ── */
+.bc-tier-1 .bc-tier-front {
+  width: 220px;
+  height: 72px;
+  background: linear-gradient(180deg, #fdf0e6 0%, #f5e0cc 30%, #ecd0b8 70%, #e4c4ac 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.5),
+    inset 0 -4px 8px rgba(180,120,80,.15),
+    0 6px 16px rgba(80,30,15,.2);
+}
+.bc-tier-1 .bc-tier-side-l {
+  background: linear-gradient(90deg, #e8c6ae, #f0d4c0);
+  border-radius: 12px 0 0 14px;
+}
+.bc-tier-1 .bc-tier-side-r {
+  background: linear-gradient(270deg, #e8c6ae, #f0d4c0);
+  border-radius: 0 12px 14px 0;
+}
+.bc-tier-1 .bc-tier-top {
+  background: linear-gradient(180deg, #fdf5ee, #f8ead8);
+}
+
+/* ── Tier 2 — middle ── */
+.bc-tier-2 .bc-tier-front {
+  width: 170px;
+  height: 64px;
+  background: linear-gradient(180deg, #fef4ec 0%, #f8e6d2 30%, #f0d8c0 70%, #eacbb2 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.5),
+    inset 0 -4px 8px rgba(180,120,80,.12),
+    0 6px 14px rgba(80,30,15,.18);
+}
+.bc-tier-2 .bc-tier-side-l {
+  background: linear-gradient(90deg, #ecd0b8, #f4dcc8);
+}
+.bc-tier-2 .bc-tier-side-r {
+  background: linear-gradient(270deg, #ecd0b8, #f4dcc8);
+}
+.bc-tier-2 .bc-tier-top {
+  background: linear-gradient(180deg, #fef8f0, #faecd8);
+}
+
+/* ── Tier 3 — top (smallest) ── */
+.bc-tier-3 .bc-tier-front {
+  width: 120px;
+  height: 56px;
+  background: linear-gradient(180deg, #fff8f0 0%, #fbebd8 30%, #f4ddc4 70%, #efd4b8 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.6),
+    inset 0 -3px 6px rgba(180,120,80,.1),
+    0 5px 12px rgba(80,30,15,.16);
+}
+.bc-tier-3 .bc-tier-side-l {
+  background: linear-gradient(90deg, #f0d4c0, #f8e2d0);
+}
+.bc-tier-3 .bc-tier-side-r {
+  background: linear-gradient(270deg, #f0d4c0, #f8e2d0);
+}
+.bc-tier-3 .bc-tier-top {
+  background: linear-gradient(180deg, #fffaf2, #fceee0);
+}
+
+/* ── Frosting edge (cream piped along bottom of each tier) ── */
+.bc-frosting-edge {
+  position: absolute;
+  bottom: -3px;
+  left: -6px;
+  right: -6px;
+  height: 10px;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow:
+    inset 0 -2px 3px rgba(220,180,160,.2),
+    0 2px 4px rgba(0,0,0,.06);
+  z-index: 4;
+}
+.bc-tier-3 .bc-frosting-edge {
+  bottom: -2px;
+  left: -4px;
+  right: -4px;
+  height: 8px;
+  border-radius: 0 0 4px 4px;
+}
+
+/* ── Frosting drips ── */
+.bc-drip {
+  position: absolute;
+  top: -2px;
+  width: 8px;
+  border-radius: 0 0 50% 50%;
+  z-index: 5;
+  background: linear-gradient(180deg, #fff, #fef4ec);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.8), 0 1px 3px rgba(0,0,0,.08);
+}
+/* Tier 1 drips */
+.bc-tier-1 .bc-drip.bc-d1 { left: 12%; height: 18px; }
+.bc-tier-1 .bc-drip.bc-d2 { left: 24%; height: 26px; }
+.bc-tier-1 .bc-drip.bc-d3 { left: 38%; height: 14px; }
+.bc-tier-1 .bc-drip.bc-d4 { left: 52%; height: 22px; }
+.bc-tier-1 .bc-drip.bc-d5 { left: 64%; height: 16px; }
+.bc-tier-1 .bc-drip.bc-d6 { left: 76%; height: 24px; }
+.bc-tier-1 .bc-drip.bc-d7 { left: 88%; height: 12px; }
+/* Tier 2 drips */
+.bc-tier-2 .bc-drip.bc-d1 { left: 10%; height: 16px; }
+.bc-tier-2 .bc-drip.bc-d2 { left: 28%; height: 22px; }
+.bc-tier-2 .bc-drip.bc-d3 { left: 46%; height: 12px; }
+.bc-tier-2 .bc-drip.bc-d4 { left: 66%; height: 20px; }
+.bc-tier-2 .bc-drip.bc-d5 { left: 84%; height: 14px; }
+/* Tier 3 drips */
+.bc-tier-3 .bc-drip.bc-d1 { left: 14%; height: 14px; }
+.bc-tier-3 .bc-drip.bc-d2 { left: 40%; height: 18px; }
+.bc-tier-3 .bc-drip.bc-d3 { left: 72%; height: 12px; }
+
+/* ── Cream rings between tiers ── */
+.bc-cream-ring {
+  position: relative;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff 0%, #fef6ee 60%, #faecd8 100%);
+  box-shadow:
+    inset 0 -2px 3px rgba(200,160,130,.15),
+    0 2px 6px rgba(0,0,0,.06);
+  z-index: 6;
+  opacity: 0;
+  transform: scaleX(.7);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1);
+}
+.bc-cream-ring.build {
+  opacity: 1;
+  transform: scaleX(1);
+}
+.bc-cr-2 { width: 132px; margin-top: -6px; }
+.bc-cr-1 { width: 182px; margin-top: -6px; }
+
+/* ── Piping line decoration ── */
+.bc-piping-line {
+  position: absolute;
+  bottom: 14px;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  border-top: 2px dashed rgba(255,255,255,.55);
+  z-index: 4;
+}
+.bc-tier-3 .bc-piping-line { bottom: 12px; }
+
+/* ── Decorative rows ── */
+.bc-deco-row {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  z-index: 7;
+  opacity: 0;
+  transform: scale(.5);
+  transition: opacity .5s ease .2s, transform .5s cubic-bezier(.22,1,.36,1) .2s;
+}
+.bc-deco-row.build {
+  opacity: 1;
+  transform: scale(1);
+}
+.bc-rose {
+  font-size: 14px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.15));
+}
+.bc-pearl {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #e8d8cc);
+  box-shadow: 0 0 4px rgba(255,255,255,.6), inset 0 -1px 1px rgba(180,140,110,.3);
+}
+.bc-sugar-flower {
+  font-size: 12px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.12));
+}
+.bc-heart-deco {
+  font-size: 10px;
+  color: #e88ba8;
+  filter: drop-shadow(0 0 4px rgba(232,139,168,.5));
+}
+
+/* ── Plate / Cake board ── */
+.bc-plate {
+  width: 260px;
+  height: 18px;
+  margin-top: -2px;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  background: linear-gradient(180deg, #f8e8da, #f0d8c4);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.4),
+    0 3px 10px rgba(80,30,15,.15);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.bc-plate.build { opacity: 1; }
+.bc-plate-shadow {
+  width: 240px;
+  height: 10px;
+  margin-top: -1px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(80,30,15,.12) 0%, transparent 70%);
+  z-index: 0;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.bc-plate-shadow.build { opacity: 1; }
+
+/* ── Candles ── */
+.bc-candles {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 18px;
+  z-index: 10;
+}
+.bc-candle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1);
+  position: relative;
+}
+.bc-candle.place {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bc-candle-body {
+  width: 7px;
+  height: 36px;
+  border-radius: 2px 2px 1px 1px;
+  position: relative;
+  overflow: hidden;
+}
+/* Alternate candle colors */
+.bc-candle[data-c="0"] .bc-candle-body { background: linear-gradient(180deg, #f6d4a8, #f0c48c); }
+.bc-candle[data-c="1"] .bc-candle-body { background: linear-gradient(180deg, #f4b8c8, #eca4b4); }
+.bc-candle[data-c="2"] .bc-candle-body { background: linear-gradient(180deg, #d4c4f0, #c4b0e8); }
+.bc-candle[data-c="3"] .bc-candle-body { background: linear-gradient(180deg, #f6d4a8, #f0c48c); }
+.bc-candle[data-c="4"] .bc-candle-body { background: linear-gradient(180deg, #f4b8c8, #eca4b4); }
+.bc-candle[data-c="5"] .bc-candle-body { background: linear-gradient(180deg, #d4c4f0, #c4b0e8); }
+
+.bc-candle-shine {
+  position: absolute;
+  left: 1px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,.5), transparent);
+  border-radius: 1px;
+}
+.bc-candle-base {
+  width: 11px;
+  height: 5px;
+  border-radius: 1px 1px 3px 3px;
+  background: linear-gradient(180deg, #f8e8da, #ecd0b8);
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+.bc-wick {
+  width: 1.5px;
+  height: 5px;
+  background: #5a3a2a;
+  border-radius: 1px;
+}
+
+/* ── Flames ── */
+.bc-flame {
+  position: relative;
+  width: 12px;
+  height: 18px;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity .4s ease, transform .5s cubic-bezier(.22,1,.36,1);
+  margin-top: -1px;
+}
+.bc-candle.lit .bc-flame {
+  opacity: 1;
+  transform: scale(1);
+  animation: bcFlameWaver 1.5s ease-in-out infinite;
+}
+.bc-flame-glow {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,200,100,.35) 0%, rgba(255,180,80,.12) 50%, transparent 70%);
+  animation: bcGlowPulse 2s ease-in-out infinite;
+}
+.bc-flame-outer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 10px;
+  height: 16px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ffb844 0%, #ff8c22 40%, #ff6600 100%);
+  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+  box-shadow: 0 0 8px rgba(255,160,50,.6);
+}
+.bc-flame-inner {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 5px;
+  height: 10px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #fff8e0 0%, #ffcc44 100%);
+  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+}
+
+@keyframes bcFlameWaver {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.04) rotate(-3deg); }
+  50% { transform: scale(.97) rotate(2deg); }
+  75% { transform: scale(1.02) rotate(-1deg); }
+}
+@keyframes bcGlowPulse {
+  0%, 100% { opacity: .7; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
+
+/* ── Smoke wisps ── */
+.bc-smoke {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+.bc-candle.smoking .bc-smoke {
+  opacity: 1;
+}
+.bc-smoke-wisp {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(180,180,180,.5);
+  opacity: 0;
+}
+.bc-candle.smoking .bc-smoke-wisp {
+  animation: bcSmokeRise var(--sd, 1.4s) ease-out forwards;
+}
+.bc-candle.smoking .bc-sw1 { --sd: 1.2s; animation-delay: 0s; left: -2px; }
+.bc-candle.smoking .bc-sw2 { --sd: 1.5s; animation-delay: .15s; left: 1px; }
+.bc-candle.smoking .bc-sw3 { --sd: 1.8s; animation-delay: .3s; left: 3px; }
+
+@keyframes bcSmokeRise {
+  0% {
+    opacity: .7;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  50% {
+    opacity: .4;
+    transform: translateY(-20px) translateX(var(--sx, 4px)) scale(1.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-44px) translateX(var(--sx, -2px)) scale(.6);
+  }
+}
+
+/* ── Blow animation on flames ── */
+.bc-candle.blown-out .bc-flame {
+  animation: bcFlameBlowOut .5s ease forwards !important;
+}
+@keyframes bcFlameBlowOut {
+  0% { transform: scale(1); opacity: 1; }
+  30% { transform: scale(1.2) rotate(25deg); opacity: .8; }
+  100% { transform: scale(0) rotate(40deg); opacity: 0; }
+}
+
+/* ── Breeze effect (flames lean before blowing out) ── */
+.bc-candles.breeze .bc-flame {
+  animation: bcBreeze .4s ease-in-out forwards !important;
+}
+@keyframes bcBreeze {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(.8) rotate(20deg) translateX(4px); }
+}
+
+/* ── Floaters ── */
+.bc-floaters {
+  position: absolute;
+  inset: -60px;
+  pointer-events: none;
+  overflow: visible;
+}
+.bc-floater {
+  position: absolute;
+  opacity: 0;
+  font-size: 16px;
+  filter: drop-shadow(0 0 6px rgba(255,180,200,.5));
+}
+.bc-floater.show {
+  animation: bcFloat var(--dur, 3s) ease-in-out infinite;
+  animation-delay: var(--del, 0s);
+}
+@keyframes bcFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(.5);
+  }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  50% {
+    transform: translate(var(--tx, 20px), var(--ty, -30px)) scale(1);
+  }
+}
+
+/* ── Text overlays ── */
+.bc-made-for, .bc-make-wish {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(22px, 4vw, 34px);
+  color: var(--warm-white);
+  text-shadow: 0 0 20px rgba(246,182,200,.7);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 1s ease, transform 1s ease;
+  text-align: center;
+  margin-top: 16px;
+}
+.bc-made-for.show, .bc-make-wish.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Blow button ── */
+.bc-blow-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 36px;
+  margin-top: 22px;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(15px, 3vw, 18px);
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(232,139,168,.7), rgba(201,79,124,.8));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 20px rgba(201,79,124,.4),
+    0 0 40px rgba(232,139,168,.2),
+    inset 0 1px 1px rgba(255,255,255,.2);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px) scale(.9);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1),
+              box-shadow .3s ease, background .3s ease;
+  animation: bcBtnPulse 2.5s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+.bc-blow-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.15) 50%, transparent 60%);
+  animation: bcBtnShine 3s ease-in-out infinite;
+}
+@keyframes bcBtnShine {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+@keyframes bcBtnPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(201,79,124,.4), 0 0 40px rgba(232,139,168,.2); }
+  50% { box-shadow: 0 4px 28px rgba(201,79,124,.55), 0 0 60px rgba(232,139,168,.35); }
+}
+.bc-blow-btn.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.bc-blow-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+  background: linear-gradient(135deg, rgba(240,150,180,.85), rgba(220,100,150,.9));
+  box-shadow: 0 8px 30px rgba(201,79,124,.55), 0 0 50px rgba(232,139,168,.3);
+}
+.bc-blow-btn:active {
+  transform: translateY(0) scale(.97);
+}
+.bc-blow-btn:disabled {
+  opacity: .5;
+  cursor: default;
+  animation: none;
+}
+.bc-blow-btn:disabled:hover {
+  transform: translateY(0) scale(1);
+}
+
+/* ── Wish text ── */
+.bc-wish-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(20px, 3.5vw, 30px);
+  color: var(--warm-white);
+  text-shadow: 0 0 16px rgba(246,182,200,.7);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease;
+  text-align: center;
+  margin-top: 18px;
+  min-height: 1.5em;
+}
+.bc-wish-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .bc-section { padding: 60px 12px 80px; }
+  .bc-cake-wrap { transform: translateY(40px) scale(.75); }
+  .bc-cake-wrap.show { transform: translateY(0) scale(.75); }
+
+  .bc-tier-1 .bc-tier-front { width: 180px; height: 58px; }
+  .bc-tier-2 .bc-tier-front { width: 140px; height: 52px; }
+  .bc-tier-3 .bc-tier-front { width: 100px; height: 46px; }
+
+  .bc-tier-1 .bc-tier-side-l,
+  .bc-tier-1 .bc-tier-side-r { width: 12px; }
+  .bc-tier-2 .bc-tier-side-l,
+  .bc-tier-2 .bc-tier-side-r { width: 10px; }
+  .bc-tier-3 .bc-tier-side-l,
+  .bc-tier-3 .bc-tier-side-r { width: 8px; }
+
+  .bc-cr-2 { width: 112px; }
+  .bc-cr-1 { width: 152px; }
+
+  .bc-plate { width: 210px; height: 14px; }
+  .bc-plate-shadow { width: 195px; }
+
+  .bc-candles { gap: 14px; }
+  .bc-candle-body { width: 6px; height: 30px; }
+
+  .bc-rose { font-size: 12px; }
+  .bc-pearl { width: 5px; height: 5px; }
+
+  .bc-drip { width: 6px; }
+  .bc-tier-1 .bc-drip.bc-d2 { height: 20px; }
+  .bc-tier-1 .bc-drip.bc-d4 { height: 16px; }
+  .bc-tier-1 .bc-drip.bc-d6 { height: 18px; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .bc-cake-wrap { transition: none; transform: none !important; opacity: 1 !important; }
+  .bc-tier { transition: none; transform: none !important; opacity: 1 !important; }
+  .bc-cream-ring { transition: none; transform: none !important; opacity: 1 !important; }
+  .bc-deco-row { transition: none; transform: none !important; opacity: 1 !important; }
+  .bc-plate, .bc-plate-shadow { transition: none; opacity: 1 !important; }
+  .bc-candle { transition: none; transform: none !important; opacity: 1 !important; }
+  .bc-flame { animation: none !important; transition: none; opacity: 1 !important; transform: none !important; }
+  .bc-flame-glow { animation: none !important; }
+  .bc-candle.lit .bc-flame { animation: none !important; }
+  .bc-candle.blown-out .bc-flame { animation: none !important; opacity: 0 !important; }
+  .bc-blow-btn { animation: none !important; transition: none; opacity: 1 !important; transform: none !important; }
+  .bc-blow-btn.show { transform: none !important; }
+  .bc-made-for, .bc-make-wish, .bc-wish-text { transition: none; opacity: 1 !important; transform: none !important; }
+  .bc-wait, .bc-one-more { transition: none; opacity: 1 !important; transform: none !important; }
+  .bc-floater { animation: none !important; }
+  .bc-smoke-wisp { animation: none !important; }
+}
 /* ── Grand finale ── */
 .finale {
   margin-top: 140px;

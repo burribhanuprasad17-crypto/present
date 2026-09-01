@@ -1978,6 +1978,6 @@
      START
      ========================================================== */
 
-  startIntroAnimation();
+  startOpening();
 
 })(window);

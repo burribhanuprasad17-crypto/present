@@ -230,8 +230,6 @@
 
   /* ── Elements ── */
   const els = {
-    wait: document.getElementById('bc-wait'),
-    oneMore: document.getElementById('bc-one-more'),
     ambient: document.getElementById('bc-ambient'),
     cakeWrap: document.getElementById('bc-cake-wrap'),
     cake: document.getElementById('bc-cake'),
@@ -312,20 +310,7 @@
     }
   }
 
-  /* ── Phase 1: Intro text ── */
-  async function phaseIntro() {
-    if (RM) { els.wait.style.opacity = 1; els.wait.style.transform = 'none'; els.oneMore.style.opacity = 1; els.oneMore.style.transform = 'none'; return; }
-    els.wait.classList.add('show');
-    await wait(1800);
-    els.wait.classList.add('hide');
-    await wait(600);
-    els.oneMore.classList.add('show');
-    await wait(1600);
-    els.oneMore.classList.add('hide');
-    await wait(600);
-  }
-
-  /* ── Phase 2: Cake wrapper appears, plate builds ── */
+  /* ── Phase 1: Cake wrapper appears, plate builds ── */
   async function phaseCakeAppear() {
     els.cakeWrap.classList.add('show');
     await wait(RM ? 100 : 800);
@@ -401,7 +386,6 @@
 
   /* ── Full build sequence ── */
   async function buildCake() {
-    await phaseIntro();
     await phaseCakeAppear();
     await phaseTiers();
     await phaseDecorations();

@@ -235,7 +235,8 @@
   position: relative;
   display: flex;
   width: min(900px, 92vw);
-  height: min(520px, 70vh);
+  min-height: min(520px, 70vh);
+  max-height: 85vh;
   transform-style: preserve-3d;
   filter: drop-shadow(0 20px 60px rgba(0,0,0,.5));
 }
@@ -272,7 +273,8 @@
 /* ── Page base ── */
 .book-page {
   position: relative;
-  width: 50%; height: 100%;
+  width: 50%;
+  min-height: 100%;
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -403,6 +405,7 @@
 .photo-frame {
   position: relative;
   width: 100%; max-width: 380px;
+  max-height: 65vh;
   background: #faf5ef;
   border-radius: 4px;
   padding: 12px;
@@ -412,6 +415,7 @@
     inset 0 0 0 1px rgba(0,0,0,.04);
   transform: rotate(-.5deg);
   transition: transform .6s ease;
+  overflow: hidden;
 }
 
 .photo-frame:hover {
@@ -427,6 +431,7 @@
 
 .photo-img {
   width: 100%; height: auto;
+  max-height: 60vh;
   object-fit: contain;
   border-radius: 2px;
   display: block;

@@ -55,7 +55,7 @@ const CONFIG = {
   finaleSub: "This little world was made just for you.",
 
   musicEnabled: true,
-  musicFile: "music/birthday.mp3"
+  musicFile: "music/love.mp3"
 };
 
 /* ══════════ 2. Unlock state — login NEVER reappears during a visit ══════════

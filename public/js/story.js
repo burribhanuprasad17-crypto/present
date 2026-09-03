@@ -384,6 +384,94 @@
     return new Promise((r) => setTimeout(r, ms));
   }
 
+  /* ══════════ MUSIC ══════════ */
+  const MUSIC_KEY = "birthdayMusicWanted";
+  const MUSIC_SRC = "music/love.mp3";
+
+  const Music = (() => {
+    let audio = null, fallback = null, playing = false;
+
+    function ensureAudio() {
+      if (!audio) {
+        audio = new Audio(MUSIC_SRC);
+        audio.loop = true;
+        audio.addEventListener("error", () => { audio = null; });
+      }
+      return audio;
+    }
+    function startFallback() {
+      if (fallback) return true;
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return false;
+      fallback = new Ctx();
+      const master = fallback.createGain();
+      master.gain.value = 0;
+      master.connect(fallback.destination);
+      [261.63, 329.63, 392.0, 523.25].forEach((freq, i) => {
+        const osc = fallback.createOscillator(), g = fallback.createGain();
+        osc.type = "sine"; osc.frequency.value = freq;
+        g.gain.value = 0.05 / (i + 1);
+        const lfo = fallback.createOscillator(), lg = fallback.createGain();
+        lfo.frequency.value = 0.1 + Math.random() * 0.08; lg.gain.value = 0.02;
+        lfo.connect(lg).connect(g.gain);
+        osc.connect(g).connect(master);
+        osc.start(); lfo.start();
+      });
+      master.gain.linearRampToValueAtTime(0.5, fallback.currentTime + 3);
+      return true;
+    }
+    function fadeVolume(a) {
+      a.volume = 0;
+      const fade = setInterval(() => {
+        a.volume = Math.min(0.6, a.volume + 0.05);
+        if (a.volume >= 0.6) clearInterval(fade);
+      }, 150);
+    }
+    function play() {
+      const a = ensureAudio();
+      let hasSrc = false;
+      try { hasSrc = !!(a.src && a.src !== window.location.href && !a.error); } catch (e) {}
+      if (hasSrc) {
+        a.play().then(() => fadeVolume(a)).catch(() => { if (startFallback()) fallback.resume(); });
+      } else if (startFallback()) fallback.resume();
+      playing = true;
+    }
+    function pause() {
+      if (audio) audio.pause();
+      if (fallback) fallback.suspend();
+      playing = false;
+    }
+    function toggle() {
+      playing ? pause() : play();
+      try { localStorage.setItem(MUSIC_KEY, String(playing)); } catch (e) {}
+      return playing;
+    }
+    function resumeIfWanted() {
+      let wanted = false;
+      try { wanted = localStorage.getItem(MUSIC_KEY) === "true"; } catch (e) {}
+      if (wanted && !playing) play();
+    }
+    return { toggle, resumeIfWanted, get playing() { return playing; } };
+  })();
+
+  function wireMusicPill() {
+    const btn = document.getElementById("music-toggle");
+    if (!btn) return;
+    const syncUI = () => {
+      btn.classList.toggle("playing", Music.playing);
+      btn.setAttribute("aria-pressed", String(Music.playing));
+    };
+    btn.addEventListener("click", () => { Music.toggle(); syncUI(); });
+    Music.resumeIfWanted(); syncUI();
+    ["pointerdown", "keydown", "touchstart"].forEach(evt =>
+      document.addEventListener(evt, function once() {
+        Music.resumeIfWanted(); syncUI();
+        ["pointerdown","keydown","touchstart"].forEach(ev2 =>
+          document.removeEventListener(ev2, once));
+      }, { once: true, passive: true }));
+  }
+
   /* ══════════ INIT ══════════ */
   buildDust();
+  wireMusicPill();
 })();

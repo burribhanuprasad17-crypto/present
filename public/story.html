@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Book of Us ♥</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=9" />
+<link rel="stylesheet" href="css/story.css" />
+</head>
+<body class="story-body">
+
+  <!-- ══════════ Ambient background ══════════ -->
+  <div class="story-bg" aria-hidden="true">
+    <div class="story-dust" id="story-dust"></div>
+    <div class="story-glow"></div>
+  </div>
+
+  <!-- ══════════ Opening screen ══════════ -->
+  <div id="story-opening" class="story-opening">
+    <div class="story-opening-inner">
+      <p class="so-ornament" aria-hidden="true">✦</p>
+      <h1 class="so-title">A Story Written in Nine Chapters</h1>
+      <p class="so-sub">Some memories deserve more than a photograph.</p>
+      <p class="so-sub2">They deserve a place in our story.</p>
+      <button id="so-open" class="so-btn" aria-label="Open the story">
+        <span class="so-btn-text">Open Our Story</span>
+        <span class="so-btn-glow" aria-hidden="true"></span>
+      </button>
+      <p class="so-ornament-bottom" aria-hidden="true">♥</p>
+    </div>
+  </div>
+
+  <!-- ══════════ Book stage ══════════ -->
+  <div id="book-stage" class="book-stage" hidden>
+
+    <!-- Chapter intro overlay -->
+    <div id="chapter-intro" class="chapter-intro" aria-hidden="true">
+      <p class="ci-number"></p>
+      <p class="ci-title"></p>
+    </div>
+
+    <!-- The book -->
+    <div class="book-wrapper">
+      <div class="book" id="book">
+
+        <!-- Page turn shadow -->
+        <div class="book-shadow" aria-hidden="true"></div>
+
+        <!-- Left page (story) -->
+        <div class="book-page book-left" id="book-left">
+          <div class="page-texture" aria-hidden="true"></div>
+          <div class="page-content" id="page-text-content">
+            <p class="page-chapter-num" id="p-chapter-num">CHAPTER 01</p>
+            <h2 class="page-chapter-title" id="p-chapter-title">Where It All Began</h2>
+            <div class="page-divider" aria-hidden="true"><span>✦</span></div>
+            <p class="page-story" id="p-story"></p>
+            <div class="page-ornament" aria-hidden="true">♥</div>
+          </div>
+        </div>
+
+        <!-- Center spine -->
+        <div class="book-spine" aria-hidden="true"></div>
+
+        <!-- Right page (image) -->
+        <div class="book-page book-right" id="book-right">
+          <div class="page-texture" aria-hidden="true"></div>
+          <div class="page-content page-image-wrap">
+            <div class="photo-frame">
+              <div class="photo-mat" aria-hidden="true"></div>
+              <img id="p-image" class="photo-img" src="" alt="" />
+              <div class="photo-shine" aria-hidden="true"></div>
+            </div>
+            <p class="photo-caption" id="p-caption"></p>
+          </div>
+        </div>
+
+        <!-- Stacked pages behind (visual depth) -->
+        <div class="book-page-stack" aria-hidden="true">
+          <div class="stack-page stack-1"></div>
+          <div class="stack-page stack-2"></div>
+          <div class="stack-page stack-3"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="book-nav">
+      <button id="btn-prev" class="book-nav-btn book-nav-prev" aria-label="Previous chapter">
+        <span aria-hidden="true">←</span> Previous
+      </button>
+      <span class="book-nav-counter" id="nav-counter">01 / 09</span>
+      <button id="btn-next" class="book-nav-btn book-nav-next" aria-label="Next chapter">
+        Next <span aria-hidden="true">→</span>
+      </button>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="book-progress" id="book-progress" role="progressbar" aria-label="Chapter progress"></div>
+  </div>
+
+  <!-- ══════════ Final closing screen ══════════ -->
+  <div id="story-ending" class="story-ending" hidden>
+    <div class="story-ending-inner">
+      <p class="se-ornament" aria-hidden="true">♥</p>
+      <h2 class="se-line se-1">And those were only nine chapters&hellip;</h2>
+      <h2 class="se-line se-2">There are still so many pages left to write.</h2>
+      <p class="se-line se-3">Some stories are not meant to have an ending.</p>
+      <p class="se-line se-4">Thank you for being part of my story.</p>
+      <p class="se-ornament-bottom" aria-hidden="true">✦</p>
+      <a href="gallery.html#love-letter" class="se-btn">Return to Memories</a>
+    </div>
+  </div>
+
+  <script src="js/story.js"></script>
+</body>
+</html>

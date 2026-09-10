@@ -7,8 +7,8 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=9" />
-<link rel="stylesheet" href="css/story.css" />
+<link rel="stylesheet" href="css/style.css?v=10" />
+<link rel="stylesheet" href="css/story.css?v=4" />
 </head>
 <body class="story-body">
 
@@ -31,6 +31,7 @@
       <h1 class="so-title">A Story Written in Nine Chapters</h1>
       <p class="so-sub">Some memories deserve more than a photograph.</p>
       <p class="so-sub2">They deserve a place in our story.</p>
+      <p class="so-welcome" id="so-welcome" hidden>Welcome back&hellip; your story is waiting. ♥</p>
       <button id="so-open" class="so-btn" aria-label="Open the story">
         <span class="so-btn-text">Open Our Story</span>
         <span class="so-btn-glow" aria-hidden="true"></span>
@@ -108,19 +109,132 @@
     <div class="book-progress" id="book-progress" role="progressbar" aria-label="Chapter progress"></div>
   </div>
 
-  <!-- ══════════ Final closing screen ══════════ -->
-  <div id="story-ending" class="story-ending" hidden>
-    <div class="story-ending-inner">
-      <p class="se-ornament" aria-hidden="true">♥</p>
-      <h2 class="se-line se-1">And those were only nine chapters&hellip;</h2>
-      <h2 class="se-line se-2">There are still so many pages left to write.</h2>
-      <p class="se-line se-3">Some stories are not meant to have an ending.</p>
-      <p class="se-line se-4">Thank you for being part of my story.</p>
-      <p class="se-ornament-bottom" aria-hidden="true">✦</p>
-      <a href="gallery.html#love-letter" class="se-btn">Return to Memories</a>
+  <!-- ══════════ Closing veil (played over the book) ══════════ -->
+  <div id="book-veil" class="book-veil" aria-hidden="true"></div>
+
+  <!-- ══════════ Stage · The book closes ══════════ -->
+  <div id="book-close" class="journey-stage" hidden>
+    <div class="jc-inner">
+      <div class="jc-book" id="jc-book" aria-hidden="true">
+        <span class="jc-book-pages"></span>
+        <span class="jc-book-cover"></span>
+        <span class="jc-book-title">The Book of Us</span>
+      </div>
+      <div class="jc-lines" id="jc-lines"></div>
+      <button id="jc-btn" class="journey-btn" hidden>One More Thing&hellip; ♥</button>
     </div>
   </div>
 
-  <script src="js/story.js"></script>
+  <!-- ══════════ Stage · One more thing ══════════ -->
+  <div id="one-more" class="journey-stage" hidden>
+    <div class="om-inner">
+      <p class="om-kicker">There is still one more story&hellip;</p>
+      <h2 class="om-title">ONE MORE THING...</h2>
+      <p class="om-sub">There are a few things I never knew how to say.</p>
+      <button id="om-envelope" class="om-envelope" aria-label="Open the envelope">
+        <span class="om-env-paper" aria-hidden="true"></span>
+        <span class="om-env-flap" aria-hidden="true"></span>
+        <span class="om-env-back" aria-hidden="true"></span>
+        <span class="om-wax" aria-hidden="true">♥</span>
+        <span class="om-env-label">Open me&hellip;</span>
+      </button>
+      <p class="om-hint">Seven little notes are waiting inside.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · Things I never said ══════════ -->
+  <div id="notes" class="journey-stage" hidden>
+    <div class="notes-inner">
+      <p class="notes-kicker" id="notes-kicker"></p>
+      <div class="note-card" id="note-card">
+        <p class="note-index" id="note-index"></p>
+        <h3 class="note-title" id="note-title"></h3>
+        <div class="note-photo" id="note-photo" hidden></div>
+        <p class="note-text" id="note-text"></p>
+        <p class="note-ornament" aria-hidden="true">♥</p>
+      </div>
+      <button id="note-next" class="journey-btn">Next ♥</button>
+      <p class="notes-progress" id="notes-progress"></p>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · Our story (timeline world) ══════════ -->
+  <div id="timeline" class="journey-stage" hidden>
+    <div class="tl-scene" id="tl-scene"></div>
+    <div class="tl-path" id="tl-path" aria-hidden="true"></div>
+    <div class="tl-ui">
+      <p class="tl-count" id="tl-count">01 / 09</p>
+      <h2 class="tl-title" id="tl-title"></h2>
+      <p class="tl-text" id="tl-text"></p>
+      <button id="tl-next" class="journey-btn">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · The letter ══════════ -->
+  <div id="letter-stage" class="journey-stage" hidden>
+    <div class="lt-inner">
+      <button id="lt-envelope" class="lt-envelope" aria-label="Open the letter">
+        <span class="lt-env-paper" aria-hidden="true"></span>
+        <span class="lt-env-flap" aria-hidden="true"></span>
+        <span class="lt-env-back" aria-hidden="true"></span>
+        <span class="lt-wax" aria-hidden="true">♥</span>
+        <span class="lt-env-label">For Bangaram ♥</span>
+      </button>
+      <div class="lt-letter" id="lt-letter" hidden>
+        <span class="paper-tape" aria-hidden="true"></span>
+        <h3 class="lt-letter-title">My dearest Bangaram&hellip;</h3>
+        <p class="lt-letter-body" id="lt-letter-body"></p>
+        <p class="lt-letter-sign">Forever yours ♥</p>
+      </div>
+      <button id="lt-next" class="journey-btn" hidden>One last thing&hellip;</button>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · Rewind ══════════ -->
+  <div id="rewind" class="journey-stage" hidden>
+    <div class="rw-inner">
+      <p class="rw-line rw-1">Close your eyes.</p>
+      <p class="rw-line rw-2">Now remember everything again&hellip;</p>
+      <div class="rw-flash" id="rw-flash" aria-hidden="true"></div>
+      <div class="rw-heartbeat" aria-hidden="true"><span class="rw-beat"></span></div>
+      <p class="rw-line rw-3">And then&hellip; silence.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · The birthday reveal ══════════ -->
+  <div id="reveal" class="journey-stage" hidden>
+    <div class="rv-particles" id="rv-particles" aria-hidden="true"></div>
+    <div class="rv-inner">
+      <p class="rv-line" id="rv-line-1">And after everything&hellip;</p>
+      <p class="rv-line" id="rv-line-2">there is only one thing left to say.</p>
+      <div class="rv-birthday" id="rv-birthday">
+        <p class="rv-kicker">HAPPY BIRTHDAY</p>
+        <h1 class="rv-name">Bangaram <span class="rv-heart">&#10084;</span></h1>
+      </div>
+      <p class="rv-thanks" id="rv-thanks">Thank you for becoming one of the most beautiful parts of my story.</p>
+      <p class="rv-notover" id="rv-notover">And this story&hellip; isn&rsquo;t over yet.</p>
+      <h2 class="rv-continues" id="rv-continues">OUR STORY CONTINUES... 🌸</h2>
+      <button id="rv-surprise" class="journey-btn" hidden>Open Your Final Surprise</button>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · Final surprise ══════════ -->
+  <div id="final-surprise" class="journey-stage" hidden>
+    <div class="fs-card">
+      <div class="fs-photo">
+        <img id="fs-image" src="assets/pic9.jpeg" alt="A beautiful memory" />
+        <div class="fs-shine" aria-hidden="true"></div>
+      </div>
+      <p class="fs-line">Every page of this little world was made with love &mdash; for you, and only you.</p>
+      <p class="fs-sign">Happy Birthday, Bangaram ♥</p>
+      <p class="fs-soft">And as long as our story is being written&hellip; you will always be its favourite part.</p>
+      <div class="fs-actions">
+        <a href="home.html" class="journey-btn">Return Home ♥</a>
+        <a href="gallery.html#love-letter" class="journey-btn ghost">Read the Letter 🌸</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/story.js?v=4"></script>
 </body>
 </html>

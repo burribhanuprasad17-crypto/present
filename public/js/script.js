@@ -8,9 +8,9 @@ const CONFIG = {
   name: "Bangaram",
   birthDate: "2006-09-12",                 // YYYY-MM-DD
 
-  heroKicker: "Happy Birthday",
-  heroName: "Bangaram ♥",
-  gardenLine: "Today, the whole garden blooms a little brighter \u2014 not for any grand occasion, but just because you deserve it.",
+  heroKicker: "A little world, made just for you",
+  heroName: "There is a little story I want you to walk through.",
+  gardenLine: "Some of its pages you already know… and a few you haven't turned yet. Let's walk through it together.",
   unlockLine1: "I knew it was you…",
 
   quotes: [

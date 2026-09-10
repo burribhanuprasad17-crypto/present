@@ -8,7 +8,80 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css?v=10" />
-<link rel="stylesheet" href="css/story.css?v=4" />
+<link rel="stylesheet" href="css/story.css?v=5" />
+<style>
+/* Notes desk + timeline env */
+.notes-desk-scene{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.desk-surface{position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(180deg,rgba(80,45,25,.6),rgba(50,28,15,.9));border-top:2px solid rgba(217,164,65,.15)}
+.desk-lamp{position:absolute;bottom:42%;left:50%;transform:translateX(-50%);width:6px;height:40px;background:linear-gradient(180deg,#d9a441,#8b6914);border-radius:3px}
+.desk-lamp::before{content:'';position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:36px;height:18px;background:radial-gradient(ellipse at 50% 100%,rgba(255,233,180,.5),transparent 70%);border-radius:50% 50% 0 0}
+.desk-lamp::after{content:'';position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:80px;height:80px;background:radial-gradient(circle,rgba(255,233,180,.12),transparent 65%);border-radius:50%}
+.desk-flowers{position:absolute;bottom:44%;right:18%;font-size:22px;opacity:.5;animation:gentleSway 4s ease-in-out infinite}
+@keyframes gentleSway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.desk-particles{position:absolute;inset:0;pointer-events:none}
+.desk-spark{position:absolute;width:3px;height:3px;background:radial-gradient(circle,rgba(255,233,180,.8),transparent);border-radius:50%;animation:deskSparkle 5s ease-in-out infinite}
+@keyframes deskSparkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.7;transform:scale(1.2)}}
+.envelope-progress{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+.env-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);transition:all .5s ease}
+.env-dot.active{background:rgba(255,107,166,.7);border-color:rgba(255,107,166,.9);box-shadow:0 0 10px rgba(255,107,166,.4)}
+.note-envelope{position:relative;width:min(440px,88vw);margin:0 auto}
+.envelope-flap{position:absolute;top:-2px;left:0;right:0;height:50px;background:linear-gradient(135deg,#c9956b,#a87340);clip-path:polygon(0 100%,50% 0,100% 100%);transform-origin:top center;transition:transform .8s cubic-bezier(.4,0,.2,1);z-index:2}
+.note-envelope.opened .envelope-flap{transform:rotateX(180deg)}
+.envelope-back{position:absolute;inset:0;background:linear-gradient(180deg,#b8854d,#96683a);border-radius:4px;z-index:0;box-shadow:0 8px 30px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.3)}
+.note-card{position:relative;z-index:1;background:linear-gradient(170deg,#fdf6ec,#f5e6d0 40%,#efe0c8);border-radius:4px;padding:32px 28px 24px;min-height:280px;margin-top:40px;box-shadow:0 4px 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.5);transform:rotate(-0.5deg);opacity:0;transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+.note-card.show{opacity:1;transform:translateY(0) rotate(-0.5deg)}
+.note-card::before{content:'';position:absolute;inset:0;border-radius:4px;background:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(180,160,130,.15) 31px,rgba(180,160,130,.15) 32px);pointer-events:none}
+.note-index{font-family:var(--font-body);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(120,80,40,.6);margin:0 0 12px}
+.note-title{font-family:var(--font-display);font-size:clamp(22px,5vw,30px);color:#5a2d1a;margin:0 0 16px;font-weight:500}
+.note-text{font-family:var(--font-serif);font-size:clamp(15px,3.2vw,19px);line-height:1.7;color:#4a3520;margin:0 0 16px;font-style:italic}
+.note-ornament{text-align:center;font-size:18px;color:rgba(200,100,130,.5);margin:8px 0 0}
+.notes-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px}
+.notes-kicker{font-family:var(--font-display);font-size:clamp(20px,4vw,30px);color:rgba(255,253,251,.85);margin:0 0 8px;text-shadow:0 0 20px rgba(217,164,65,.2)}
+.notes-progress{font-family:var(--font-body);font-size:13px;color:rgba(255,253,251,.4);margin:14px 0 0;text-align:center}
+.tl-atmosphere{position:absolute;inset:0;z-index:0;pointer-events:none;transition:background 1.5s ease}
+.tl-env-town{background:radial-gradient(ellipse 60% 50% at 50% 80%,rgba(40,20,40,.3),transparent),linear-gradient(180deg,#0d080b,#1a0e14 40%,#1a1218)}
+.tl-env-passing{background:radial-gradient(ellipse 50% 50%,rgba(142,49,87,.1),transparent),linear-gradient(180deg,#0d080b,#1a0e14)}
+.tl-env-messages{background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(80,40,60,.15),transparent),linear-gradient(180deg,#0d080b,#150c10)}
+.tl-env-daynight{background:radial-gradient(ellipse 50% 40% at 70% 20%,rgba(255,200,100,.06),transparent),linear-gradient(180deg,#0d080b,#1a0e14)}
+.tl-env-travel{background:linear-gradient(180deg,#0d080b,#14100e 40%,#1a1412)}
+.tl-env-close{background:radial-gradient(ellipse 50% 50%,rgba(255,150,180,.08),transparent),linear-gradient(180deg,#0d080b,#1a0e14)}
+.tl-env-photos{background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(217,164,65,.05),transparent),linear-gradient(180deg,#0d080b,#1a0e14)}
+.tl-env-silly{background:radial-gradient(ellipse 50% 50% at 50% 40%,rgba(255,107,166,.06),transparent),linear-gradient(180deg,#0d080b,#1a0e14)}
+.tl-env-glow{background:radial-gradient(ellipse 60% 50% at 50% 45%,rgba(255,200,100,.08),transparent),radial-gradient(ellipse 40% 40% at 30% 60%,rgba(255,107,166,.06),transparent),linear-gradient(180deg,#0d080b,#1a0e14)}
+.tl-env-obj{position:absolute;opacity:0;transition:opacity .8s ease}
+.tl-env-obj.show{opacity:1}
+.tl-building{background:linear-gradient(180deg,rgba(60,30,40,.6),rgba(40,20,30,.8));border-radius:3px 3px 0 0;border-bottom:2px solid rgba(217,164,65,.1)}
+.tl-building::before{content:'';position:absolute;top:15%;left:20%;width:60%;height:40%;background:rgba(255,233,180,.08);border-radius:2px}
+.tl-star{width:3px;height:3px;background:rgba(255,240,246,.7);border-radius:50%;box-shadow:0 0 6px rgba(255,240,246,.5);animation:twinkleStar 3s ease-in-out infinite}
+@keyframes twinkleStar{0%,100%{opacity:.3}50%{opacity:1}}
+.tl-phone{width:28px;height:48px;border:2px solid rgba(255,255,255,.15);border-radius:6px;background:rgba(255,255,255,.03)}
+.tl-phone::before{content:'';position:absolute;top:4px;left:3px;right:3px;bottom:8px;background:rgba(100,200,255,.06);border-radius:2px}
+.tl-cloud{position:absolute;height:30px;background:rgba(255,255,255,.04);border-radius:50px;animation:cloudDrift 20s linear infinite}
+@keyframes cloudDrift{0%{transform:translateX(-120%)}100%{transform:translateX(120vw)}}
+.tl-sun{width:30px;height:30px;background:radial-gradient(circle,rgba(255,200,100,.6),rgba(255,150,50,.2));border-radius:50%;box-shadow:0 0 30px rgba(255,200,100,.3)}
+.tl-moon{width:24px;height:24px;background:radial-gradient(circle at 35% 35%,rgba(200,210,255,.5),rgba(150,160,220,.2));border-radius:50%;box-shadow:0 0 20px rgba(200,210,255,.2)}
+.tl-road{position:absolute;bottom:14%;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08) 20%,rgba(255,255,255,.08) 80%,transparent)}
+.tl-vehicle{width:50px;height:25px;background:rgba(100,60,40,.5);border-radius:4px 8px 2px 2px;animation:vehicleMove 3s ease-in-out infinite}
+@keyframes vehicleMove{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
+.tl-tree-sil{width:20px;height:40px;background:rgba(40,60,30,.3);clip-path:polygon(50% 0%,100% 100%,0% 100%)}
+.tl-mountain{background:rgba(40,25,35,.25);clip-path:polygon(0% 100%,30% 20%,50% 0%,70% 25%,100% 100%)}
+.tl-warm-glow{position:absolute;inset:0;background:radial-gradient(ellipse 40% 40% at 50% 50%,rgba(255,150,180,.08),transparent)}
+.tl-glow{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(255,200,100,.1),transparent 70%);border-radius:50%;animation:glowPulse 4s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}
+.tl-float-heart{position:absolute;font-size:14px;color:rgba(246,182,200,.4);animation:floatUpHeart 6s ease-in-out infinite}
+@keyframes floatUpHeart{0%{transform:translateY(0) scale(.8);opacity:.3}50%{transform:translateY(-20px) scale(1);opacity:.6}100%{transform:translateY(-40px) scale(.8);opacity:.3}}
+.tl-petal-pass{position:absolute;left:45%;top:35%;width:12px;height:12px;border-radius:70% 0 70% 0;background:radial-gradient(circle at 32% 32%,#FCE7ED,#E88BA8 78%);animation:petalPassBy 8s linear infinite}
+@keyframes petalPassBy{0%{transform:translate(0,0) rotate(0deg);opacity:0}10%{opacity:.8}50%{transform:translate(40px,20px) rotate(180deg);opacity:.6}100%{transform:translate(80px,-10px) rotate(360deg);opacity:0}}
+.tl-polaroid.mini{width:55px;animation:gentleFloat 5s ease-in-out infinite}
+.tl-polaroid.mini img{height:38px}
+@keyframes gentleFloat{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-8px) rotate(var(--rot,0deg))}}
+.tl-bigline{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%) scale(.8);font-family:var(--font-display);font-size:clamp(20px,5vw,34px);color:rgba(255,107,166,.9);text-shadow:0 0 30px rgba(255,107,166,.4);white-space:nowrap;opacity:0;transition:opacity 1.2s ease,transform 1.2s cubic-bezier(.22,1,.36,1);z-index:10}
+.tl-bigline.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.tl-progress-track{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10;padding:8px 16px;background:rgba(0,0,0,.3);border-radius:20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tl-pdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .4s ease}
+.tl-pdot.active{background:rgba(255,107,166,.8);box-shadow:0 0 8px rgba(255,107,166,.4);transform:scale(1.3)}
+.tl-pdot.done{background:rgba(255,107,166,.4)}
+</style>
 </head>
 <body class="story-body">
 
@@ -24,7 +97,7 @@
     ♪ A Little Tune
   </button>
 
-  <!-- ══════════ Opening screen · the book arrives closed ══════════ -->
+  <!-- ══════════ Opening screen · the story begins ══════════ -->
   <div id="story-opening" class="story-opening">
     <div class="story-opening-inner so-book-inner">
 
@@ -42,12 +115,12 @@
         <div class="sob-shadow"></div>
       </div>
 
-      <p class="so-intro-line" id="so-intro-line">Some memories deserve their own pages.</p>
-      <p class="so-welcome" id="so-welcome" hidden>Welcome back&hellip; your story is waiting. ♥</p>
+      <p class="so-intro-line" id="so-intro-line">Some stories deserve to be experienced, not just read.</p>
+      <p class="so-welcome" id="so-welcome" hidden>Welcome back… your story is waiting. ♥</p>
 
       <div class="so-actions">
-        <button id="so-open" class="so-btn" aria-label="Open the story">
-          <span class="so-btn-text">Open the Story</span>
+        <button id="so-open" class="so-btn" aria-label="Begin the story">
+          <span class="so-btn-text">Begin the Story</span>
           <span class="so-btn-glow" aria-hidden="true"></span>
         </button>
         <button id="so-continue" class="so-continue" hidden>Continue your story ♥</button>
@@ -57,8 +130,71 @@
     </div>
   </div>
 
-  <!-- ══════════ Book stage ══════════ -->
-  <div id="book-stage" class="book-stage" hidden>
+  <!-- ══════════ Stage · Things I Never Said ══════════ -->
+  <div id="notes" class="journey-stage" hidden>
+    <!-- Desk atmosphere -->
+    <div class="notes-desk-scene" aria-hidden="true">
+      <div class="desk-lamp"></div>
+      <div class="desk-surface"></div>
+      <div class="desk-flowers">🌸</div>
+      <div class="desk-particles" id="desk-particles"></div>
+    </div>
+    <div class="notes-inner">
+      <p class="notes-kicker" id="notes-kicker">Things I Never Said</p>
+      <!-- Envelope indicator -->
+      <div class="envelope-progress" id="envelope-progress"></div>
+      <!-- Message card -->
+      <div class="note-envelope" id="note-envelope">
+        <div class="envelope-flap" aria-hidden="true"></div>
+        <div class="envelope-back" aria-hidden="true"></div>
+        <div class="note-card" id="note-card">
+          <p class="note-index" id="note-index"></p>
+          <h3 class="note-title" id="note-title"></h3>
+          <div class="note-photo" id="note-photo" hidden></div>
+          <p class="note-text" id="note-text"></p>
+          <p class="note-ornament" aria-hidden="true">♥</p>
+        </div>
+      </div>
+      <button id="note-next" class="journey-btn">Next ♥</button>
+      <p class="notes-progress" id="notes-progress"></p>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · Walk Through Our Story (cinematic timeline) ══════════ -->
+  <div id="timeline" class="journey-stage" hidden>
+    <div class="tl-scene" id="tl-scene"></div>
+    <div class="tl-atmosphere" id="tl-atmosphere" aria-hidden="true"></div>
+    <div class="tl-ui">
+      <p class="tl-count" id="tl-count">01 / 09</p>
+      <h2 class="tl-title" id="tl-title"></h2>
+      <p class="tl-text" id="tl-text"></p>
+      <button id="tl-next" class="journey-btn">Continue →</button>
+    </div>
+    <div class="tl-progress-track" id="tl-progress-track" aria-hidden="true"></div>
+  </div>
+
+  <!-- ══════════ Stage · The letter ══════════ -->
+  <div id="letter-stage" class="journey-stage" hidden>
+    <div class="lt-inner">
+      <button id="lt-envelope" class="lt-envelope" aria-label="Open the letter">
+        <span class="lt-env-paper" aria-hidden="true"></span>
+        <span class="lt-env-flap" aria-hidden="true"></span>
+        <span class="lt-env-back" aria-hidden="true"></span>
+        <span class="lt-wax" aria-hidden="true">♥</span>
+        <span class="lt-env-label">For Bangaram ♥</span>
+      </button>
+      <div class="lt-letter" id="lt-letter" hidden>
+        <span class="paper-tape" aria-hidden="true"></span>
+        <h3 class="lt-letter-title">My dearest Bangaram…</h3>
+        <p class="lt-letter-body" id="lt-letter-body"></p>
+        <p class="lt-letter-sign">Forever yours ♥</p>
+      </div>
+      <button id="lt-next" class="journey-btn" hidden>Open the Book ♥</button>
+    </div>
+  </div>
+
+  <!-- ══════════ Stage · The 9-Chapter Storybook ══════════ -->
+  <div id="book-stage" class="journey-stage" hidden>
 
     <!-- Chapter intro overlay -->
     <div id="chapter-intro" class="chapter-intro" aria-hidden="true">
@@ -138,98 +274,22 @@
         <span class="jc-book-title">The Book of Us</span>
       </div>
       <div class="jc-lines" id="jc-lines"></div>
-      <button id="jc-btn" class="journey-btn" hidden>One More Thing&hellip; ♥</button>
+      <button id="jc-btn" class="journey-btn" hidden>Continue ♥</button>
     </div>
   </div>
 
-  <!-- ══════════ Stage · One more thing ══════════ -->
-  <div id="one-more" class="journey-stage" hidden>
-    <div class="om-inner">
-      <p class="om-kicker">There is still one more story&hellip;</p>
-      <h2 class="om-title">ONE MORE THING...</h2>
-      <p class="om-sub">There are a few things I never knew how to say.</p>
-      <button id="om-envelope" class="om-envelope" aria-label="Open the envelope">
-        <span class="om-env-paper" aria-hidden="true"></span>
-        <span class="om-env-flap" aria-hidden="true"></span>
-        <span class="om-env-back" aria-hidden="true"></span>
-        <span class="om-wax" aria-hidden="true">♥</span>
-        <span class="om-env-label">Open me&hellip;</span>
-      </button>
-      <p class="om-hint">Seven little notes are waiting inside.</p>
-    </div>
-  </div>
-
-  <!-- ══════════ Stage · Things I never said ══════════ -->
-  <div id="notes" class="journey-stage" hidden>
-    <div class="notes-inner">
-      <p class="notes-kicker" id="notes-kicker"></p>
-      <div class="note-card" id="note-card">
-        <p class="note-index" id="note-index"></p>
-        <h3 class="note-title" id="note-title"></h3>
-        <div class="note-photo" id="note-photo" hidden></div>
-        <p class="note-text" id="note-text"></p>
-        <p class="note-ornament" aria-hidden="true">♥</p>
-      </div>
-      <button id="note-next" class="journey-btn">Next ♥</button>
-      <p class="notes-progress" id="notes-progress"></p>
-    </div>
-  </div>
-
-  <!-- ══════════ Stage · Our story (timeline world) ══════════ -->
-  <div id="timeline" class="journey-stage" hidden>
-    <div class="tl-scene" id="tl-scene"></div>
-    <div class="tl-path" id="tl-path" aria-hidden="true"></div>
-    <div class="tl-ui">
-      <p class="tl-count" id="tl-count">01 / 09</p>
-      <h2 class="tl-title" id="tl-title"></h2>
-      <p class="tl-text" id="tl-text"></p>
-      <button id="tl-next" class="journey-btn">Continue →</button>
-    </div>
-  </div>
-
-  <!-- ══════════ Stage · The letter ══════════ -->
-  <div id="letter-stage" class="journey-stage" hidden>
-    <div class="lt-inner">
-      <button id="lt-envelope" class="lt-envelope" aria-label="Open the letter">
-        <span class="lt-env-paper" aria-hidden="true"></span>
-        <span class="lt-env-flap" aria-hidden="true"></span>
-        <span class="lt-env-back" aria-hidden="true"></span>
-        <span class="lt-wax" aria-hidden="true">♥</span>
-        <span class="lt-env-label">For Bangaram ♥</span>
-      </button>
-      <div class="lt-letter" id="lt-letter" hidden>
-        <span class="paper-tape" aria-hidden="true"></span>
-        <h3 class="lt-letter-title">My dearest Bangaram&hellip;</h3>
-        <p class="lt-letter-body" id="lt-letter-body"></p>
-        <p class="lt-letter-sign">Forever yours ♥</p>
-      </div>
-      <button id="lt-next" class="journey-btn" hidden>One last thing&hellip;</button>
-    </div>
-  </div>
-
-  <!-- ══════════ Stage · Rewind ══════════ -->
-  <div id="rewind" class="journey-stage" hidden>
-    <div class="rw-inner">
-      <p class="rw-line rw-1">Close your eyes.</p>
-      <p class="rw-line rw-2">Now remember everything again&hellip;</p>
-      <div class="rw-flash" id="rw-flash" aria-hidden="true"></div>
-      <div class="rw-heartbeat" aria-hidden="true"><span class="rw-beat"></span></div>
-      <p class="rw-line rw-3">And then&hellip; silence.</p>
-    </div>
-  </div>
-
-  <!-- ══════════ Stage · The birthday reveal ══════════ -->
+  <!-- ══════════ Stage · The birthday reveal (ONLY after book closes) ══════════ -->
   <div id="reveal" class="journey-stage" hidden>
     <div class="rv-particles" id="rv-particles" aria-hidden="true"></div>
     <div class="rv-inner">
-      <p class="rv-line" id="rv-line-1">And after everything&hellip;</p>
+      <p class="rv-line" id="rv-line-1">And after everything…</p>
       <p class="rv-line" id="rv-line-2">there is only one thing left to say.</p>
       <div class="rv-birthday" id="rv-birthday">
         <p class="rv-kicker">HAPPY BIRTHDAY</p>
         <h1 class="rv-name">Bangaram <span class="rv-heart">&#10084;</span></h1>
       </div>
       <p class="rv-thanks" id="rv-thanks">Thank you for becoming one of the most beautiful parts of my story.</p>
-      <p class="rv-notover" id="rv-notover">And this story&hellip; isn&rsquo;t over yet.</p>
+      <p class="rv-notover" id="rv-notover">And if this was only one chapter…</p>
       <h2 class="rv-continues" id="rv-continues">OUR STORY CONTINUES... 🌸</h2>
       <button id="rv-surprise" class="journey-btn" hidden>Open Your Final Surprise</button>
     </div>
@@ -242,16 +302,16 @@
         <img id="fs-image" src="assets/pic9.jpeg" alt="A beautiful memory" />
         <div class="fs-shine" aria-hidden="true"></div>
       </div>
-      <p class="fs-line">Every page of this little world was made with love &mdash; for you, and only you.</p>
+      <p class="fs-line">Every page of this little world was made with love — for you, and only you.</p>
       <p class="fs-sign">Happy Birthday, Bangaram ♥</p>
-      <p class="fs-soft">And as long as our story is being written&hellip; you will always be its favourite part.</p>
+      <p class="fs-soft">And as long as our story is being written… you will always be its favourite part.</p>
       <div class="fs-actions">
         <a href="home.html" class="journey-btn">Return Home ♥</a>
-        <a href="gallery.html#love-letter" class="journey-btn ghost">Read the Letter 🌸</a>
+        <a href="gallery.html" class="journey-btn ghost">Visit the Memories 🌸</a>
       </div>
     </div>
   </div>
 
-  <script src="js/story.js?v=4"></script>
+  <script src="js/story.js?v=5"></script>
 </body>
 </html>

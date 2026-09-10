@@ -1975,9 +1975,88 @@
   })();
 
   /* ==========================================================
+     CINEMATIC STORY OPENING — “Every story has a beginning.”
+     Plays once before the first mission. Skippable.
+     ========================================================== */
+
+  let cinematicDone = false;
+  const CINE_REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function startCinematicStory() {
+    if (CINE_REDUCED) { startOpening(); return; }
+
+    const cine = create("div", "bi-story-cine");
+    const lights = create("div", "bsc-lights");
+    lights.innerHTML =
+      '<span class="bsc-light"></span><span class="bsc-light"></span>';
+    cine.appendChild(lights);
+
+    const heroPetal = create("span", "bsc-hero-petal");
+    cine.appendChild(heroPetal);
+
+    const content = create("div", "bsc-content");
+    const lines = [
+      "Every story has a beginning.",
+      "Ours began before we even realized it.",
+      "But before there was an us…",
+      "there were simply two people.",
+    ];
+    const els = lines.map((t, i) => {
+      const p = create("p", "bsc-line" + (i === 3 ? " soft" : ""));
+      p.textContent = t;
+      content.appendChild(p);
+      return p;
+    });
+    cine.appendChild(content);
+
+    const skip = create("button", "bsc-skip");
+    skip.type = "button";
+    skip.textContent = "Skip ♥";
+    document.body.appendChild(skip);
+
+    host.appendChild(cine);
+
+    // background petals drifting down
+    for (let i = 0; i < 16; i++) {
+      const p = create("span", "bsc-petal");
+      p.style.left = random(0, 100) + "%";
+      p.style.setProperty("--dur", (7 + random(0, 6)) + "s");
+      p.style.setProperty("--sw", random(-80, 80) + "px");
+      p.style.setProperty("--rot", random(300, 700) + "deg");
+      p.style.animationDelay = "-" + random(0, 8) + "s";
+      cine.appendChild(p);
+    }
+
+    const timers = [
+      setTimeout(() => heroPetal.classList.add("show"), 600),
+      setTimeout(() => els[0].classList.add("show"), 1600),
+      setTimeout(() => els[1].classList.add("show"), 4200),
+      setTimeout(() => lights.classList.add("show"), 6600),
+      setTimeout(() => els[2].classList.add("show"), 7200),
+      setTimeout(() => els[3].classList.add("show"), 9200),
+      setTimeout(finishCinematic, 11300),
+    ];
+
+    function finishCinematic() {
+      if (cinematicDone) return;
+      cinematicDone = true;
+      timers.forEach(clearTimeout);
+      cine.classList.add("bsc-fade-out");
+      skip.remove();
+      setTimeout(() => {
+        cine.remove();
+        startOpening();
+      }, 1000);
+    }
+
+    skip.addEventListener("click", finishCinematic);
+    cine.addEventListener("click", finishCinematic);
+  }
+
+  /* ==========================================================
      START
      ========================================================== */
 
-  startOpening();
+  startCinematicStory();
 
 })(window);

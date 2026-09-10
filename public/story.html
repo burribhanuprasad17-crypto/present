@@ -24,18 +24,35 @@
     ♪ A Little Tune
   </button>
 
-  <!-- ══════════ Opening screen ══════════ -->
+  <!-- ══════════ Opening screen · the book arrives closed ══════════ -->
   <div id="story-opening" class="story-opening">
-    <div class="story-opening-inner">
-      <p class="so-ornament" aria-hidden="true">✦</p>
-      <h1 class="so-title">A Story Written in Nine Chapters</h1>
-      <p class="so-sub">Some memories deserve more than a photograph.</p>
-      <p class="so-sub2">They deserve a place in our story.</p>
+    <div class="story-opening-inner so-book-inner">
+
+      <!-- Physical closed book -->
+      <div class="so-book3d" id="so-book3d" aria-hidden="true">
+        <div class="sob-left"></div>
+        <div class="sob-spine"></div>
+        <div class="sob-right">
+          <div class="sob-cover">
+            <span class="sob-title">The Book of Us</span>
+            <span class="sob-heart">♥</span>
+          </div>
+          <div class="sob-page-back"></div>
+        </div>
+        <div class="sob-shadow"></div>
+      </div>
+
+      <p class="so-intro-line" id="so-intro-line">Some memories deserve their own pages.</p>
       <p class="so-welcome" id="so-welcome" hidden>Welcome back&hellip; your story is waiting. ♥</p>
-      <button id="so-open" class="so-btn" aria-label="Open the story">
-        <span class="so-btn-text">Open Our Story</span>
-        <span class="so-btn-glow" aria-hidden="true"></span>
-      </button>
+
+      <div class="so-actions">
+        <button id="so-open" class="so-btn" aria-label="Open the story">
+          <span class="so-btn-text">Open the Story</span>
+          <span class="so-btn-glow" aria-hidden="true"></span>
+        </button>
+        <button id="so-continue" class="so-continue" hidden>Continue your story ♥</button>
+      </div>
+
       <p class="so-ornament-bottom" aria-hidden="true">♥</p>
     </div>
   </div>

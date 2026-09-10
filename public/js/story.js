@@ -346,6 +346,8 @@
     pImage.classList.remove("revealed");
     pCaption.textContent = ch.caption;
 
+    saveChapter(index);
+
     navCounter.textContent =
       String(index + 1).padStart(2, "0") + " / " + String(TOTAL).padStart(2, "0");
 
@@ -381,6 +383,7 @@
   function turnForward() {
     if (turning || current >= TOTAL - 1) return;
     turning = true;
+    SFX.pageTurn();
     book.classList.add("turning-forward");
 
     setTimeout(() => {
@@ -400,6 +403,7 @@
   function turnBackward() {
     if (turning || current <= 0) return;
     turning = true;
+    SFX.pageTurn();
     book.classList.add("turning-backward");
 
     setTimeout(() => {
@@ -416,6 +420,32 @@
     }, REDUCED_MOTION ? 200 : 700);
   }
 
+  const BOOK_KEY = "bookOfUsChapter";
+
+  function saveChapter(i) {
+    try {
+      localStorage.setItem(BOOK_KEY, String(i));
+    } catch (e) {}
+  }
+
+  function readChapter() {
+    try {
+      const v = parseInt(localStorage.getItem(BOOK_KEY) || "0", 10);
+      if (!isNaN(v)) return Math.max(0, Math.min(TOTAL - 1, v));
+    } catch (e) {}
+    return 0;
+  }
+
+  let bookOpenAnimating = false;
+
+  function beginBookOpen() {
+    if (bookOpenAnimating) return;
+    bookOpenAnimating = true;
+    opening.classList.add("opening-book");
+    SFX.bookOpen();
+    setTimeout(() => openBook(), T(1600));
+  }
+
   async function openBook() {
     if (bookStarted) return;
     bookStarted = true;
@@ -426,12 +456,13 @@
 
     stage.hidden = false;
     buildProgress();
-    renderChapter(0, true);
+    current = readChapter();
+    renderChapter(current, true);
 
     await sleep(T(200));
     stage.classList.add("visible");
 
-    await showChapterIntro(0);
+    await showChapterIntro(current);
   }
 
   /* ══════════ THE BOOK CLOSES ══════════ */
@@ -439,6 +470,7 @@
     if (bookFinished) return;
     bookFinished = true;
 
+    SFX.bookClose();
     veil.classList.add("run");
 
     setTimeout(() => {
@@ -489,6 +521,7 @@
   omEnvelope.addEventListener("click", () => {
     if (omEnvelope.classList.contains("opened")) return;
     omEnvelope.classList.add("opened");
+    SFX.seal();
     setTimeout(() => {
       hideStage(oneMoreStage);
       setTimeout(startNotes, 400);
@@ -588,6 +621,10 @@
         '<path d="M 10 80 C 34 62, 42 52, 50 46" fill="none" stroke="rgba(246,182,200,.4)" stroke-width="1.4" stroke-dasharray="4 5"/>' +
         '<path d="M 90 80 C 66 62, 58 52, 50 46" fill="none" stroke="rgba(217,164,65,.35)" stroke-width="1.4" stroke-dasharray="4 5"/>';
       tlScene.appendChild(svg);
+      // one petal passes between them — they don't notice yet
+      const pass = document.createElement("span");
+      pass.className = "tl-petal-pass";
+      tlScene.appendChild(pass);
       addChars(st);
     } else if (st.decor === "familiar") {
       const heart = document.createElement("span");
@@ -596,6 +633,13 @@
         "right:22%;top:30%;font-size:16px;padding:6px 12px;animation-delay:.8s;";
       heart.textContent = "♥";
       tlScene.appendChild(heart);
+      // a small wave from the other side
+      const wave = document.createElement("span");
+      wave.className = "tl-bubble wave";
+      wave.textContent = "👋";
+      wave.style.cssText =
+        "left:8%;top:36%;animation-delay:1.6s;";
+      tlScene.appendChild(wave);
       addChars(st);
     } else if (st.decor === "bubbles") {
       const msgs = [
@@ -688,6 +732,12 @@
           "left:" + it.left + ";top:" + it.top + ";animation-delay:" + i * 0.4 + "s;";
         tlScene.appendChild(s);
       });
+      // the laughter bubble between them
+      const laugh = document.createElement("span");
+      laugh.className = "tl-bubble laugh fly";
+      laugh.textContent = "😂😂";
+      laugh.style.cssText = "left:44%;top:34%;animation-delay:1.2s;";
+      tlScene.appendChild(laugh);
       addChars(st);
     } else if (st.decor === "glow") {
       const glow = document.createElement("div");
@@ -809,6 +859,7 @@
   ltEnvelope.addEventListener("click", () => {
     if (ltEnvelope.classList.contains("opened")) return;
     ltEnvelope.classList.add("opened");
+    SFX.seal();
     setTimeout(() => {
       ltEnvelope.style.transition = "opacity .6s ease";
       ltEnvelope.style.opacity = "0";
@@ -852,6 +903,7 @@
       beat.classList.remove("thump");
       void beat.offsetWidth;
       beat.classList.add("thump");
+      SFX.heartbeat();
     }, T(5200));
 
     setTimeout(() => rw3.classList.add("show"), T(6400));
@@ -916,6 +968,7 @@
     setTimeout(() => {
       rvBirthday.classList.add("show");
       spawnRevealParticles();
+      SFX.chime();
     }, T(4600));
     setTimeout(() => rvThanks.classList.add("show"), T(7400));
     setTimeout(() => rvNotover.classList.add("show"), T(9400));
@@ -969,7 +1022,20 @@
   });
 
   /* ══════════ BOOK EVENT LISTENERS ══════════ */
-  openBtn.addEventListener("click", openBook);
+  openBtn.addEventListener("click", beginBookOpen);
+
+  const soContinue = document.getElementById("so-continue");
+  if (soContinue) {
+    soContinue.addEventListener("click", () => {
+      if (bookOpenAnimating) return;
+      bookOpenAnimating = true;
+      opening.classList.add("hiding");
+      setTimeout(() => {
+        opening.hidden = true;
+        showStage(oneMoreStage);
+      }, T(1300));
+    });
+  }
 
   btnPrev.addEventListener("click", () => {
     if (current === 0) return;
@@ -1163,6 +1229,95 @@
     };
   })();
 
+  /* ══════════ SOFT SOUND EFFECTS (WebAudio · subtle, gated by music) ══════════ */
+  const SFX = (() => {
+    let ctx = null;
+
+    function ensure() {
+      if (!ctx) {
+        const C = window.AudioContext || window.webkitAudioContext;
+        if (!C) return null;
+        ctx = new C();
+      }
+      if (ctx.state === "suspended") ctx.resume();
+      return ctx;
+    }
+
+    function noiseBurst({ dur = 0.3, freq = 1400, sweepTo = 400, q = 1.2, gain = 0.05 } = {}) {
+      const c = ensure();
+      if (!c) return;
+      const len = Math.floor(c.sampleRate * dur);
+      const buf = c.createBuffer(1, len, c.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      const f = c.createBiquadFilter();
+      f.type = "bandpass";
+      f.frequency.setValueAtTime(freq, c.currentTime);
+      f.frequency.exponentialRampToValueAtTime(sweepTo, c.currentTime + dur);
+      f.Q.value = q;
+      const g = c.createGain();
+      g.gain.setValueAtTime(gain, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+      src.connect(f);
+      f.connect(g);
+      g.connect(c.destination);
+      src.start();
+      src.stop(c.currentTime + dur + 0.05);
+    }
+
+    function tone({ freq = 660, dur = 0.5, gain = 0.05, type = "sine", when = 0 } = {}) {
+      const c = ensure();
+      if (!c) return;
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      const t0 = c.currentTime + when;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(gain, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g);
+      g.connect(c.destination);
+      o.start(t0);
+      o.stop(t0 + dur + 0.05);
+    }
+
+    const gate = () => Music.playing;
+
+    return {
+      pageTurn() {
+        if (!gate()) return;
+        noiseBurst({ dur: 0.2, freq: 2200, sweepTo: 700, gain: 0.04, q: 0.9 });
+      },
+      bookOpen() {
+        if (!gate()) return;
+        noiseBurst({ dur: 0.55, freq: 900, sweepTo: 240, gain: 0.05, q: 1.1 });
+      },
+      bookClose() {
+        if (!gate()) return;
+        noiseBurst({ dur: 0.45, freq: 320, sweepTo: 110, gain: 0.06, q: 1.4 });
+      },
+      seal() {
+        if (!gate()) return;
+        noiseBurst({ dur: 0.12, freq: 3400, sweepTo: 1200, gain: 0.05, q: 0.8 });
+        noiseBurst({ dur: 0.09, freq: 5200, sweepTo: 2600, gain: 0.03, q: 1 });
+      },
+      heartbeat() {
+        if (!gate()) return;
+        tone({ freq: 70, dur: 0.14, gain: 0.12 });
+        tone({ freq: 62, dur: 0.16, gain: 0.1, when: 0.22 });
+      },
+      chime() {
+        if (!gate()) return;
+        tone({ freq: 880, dur: 0.9, gain: 0.035 });
+        tone({ freq: 1320, dur: 0.7, gain: 0.025, when: 0.12 });
+        tone({ freq: 1760, dur: 0.5, gain: 0.018, when: 0.24 });
+      },
+    };
+  })();
+
   function wireMusicPill() {
     const btn = document.getElementById("music-toggle");
     if (!btn) return;
@@ -1230,8 +1385,9 @@
 
   // Welcome back — returning visitors who finished the journey
   try {
-    if (localStorage.getItem("storyJourneyDone") === "true" && soWelcome) {
-      soWelcome.hidden = false;
+    if (localStorage.getItem("storyJourneyDone") === "true") {
+      if (soWelcome) soWelcome.hidden = false;
+      if (soContinue) soContinue.hidden = false;
     }
   } catch (e) {}
 })();

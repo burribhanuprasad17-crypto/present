@@ -120,6 +120,18 @@
       </div>
     </section>
 
+    <!-- ══════════ Image Box · Photo + Quote Composition ══════════ -->
+    <section class="home-image-box reveal" aria-label="Photo moments">
+      <div class="ib-frame">
+        <div class="ib-photo">
+          <img id="ib-img" src="" alt="A special moment" />
+          <div class="ib-shine" aria-hidden="true"></div>
+        </div>
+        <p id="ib-quote" class="ib-quote"></p>
+      </div>
+      <div class="ib-dots" id="ib-dots" aria-label="Photo navigation"></div>
+    </section>
+
     <!-- CTA -->
     <div class="cta-v3 reveal">
 
@@ -145,5 +157,79 @@
   </section>
 
   <script src="js/script.js?v=6"></script>
+
+  <style>
+  /* ══════════ Image Box · Photo + Quote Composition ══════════ */
+  .home-image-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px 40px;
+  }
+  .ib-frame {
+    position: relative;
+    width: min(340px, 80vw);
+    background: rgba(255,253,251,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 14px;
+    padding: 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 24px 60px rgba(75,25,48,.45), 0 0 0 1px rgba(246,182,200,.08);
+  }
+  .ib-photo {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(75,25,48,.3);
+  }
+  .ib-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+    transition: opacity 1.2s ease;
+  }
+  .ib-shine {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.12) 0%, transparent 50%);
+    border-radius: 10px;
+    pointer-events: none;
+  }
+  .ib-quote {
+    margin-top: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.7;
+    color: rgba(255,253,251,.82);
+    text-align: center;
+    padding: 0 8px;
+    transition: opacity 1s ease;
+  }
+  .ib-dots {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .ib-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(246,182,200,.3);
+    border: none;
+    cursor: pointer;
+    transition: all .4s ease;
+    padding: 0;
+  }
+  .ib-dot.active {
+    background: var(--cherry);
+    box-shadow: 0 0 10px rgba(232,139,168,.6);
+    transform: scale(1.25);
+  }
+  </style>
 </body>
 </html>

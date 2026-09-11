@@ -997,4 +997,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   wireGalleryButton();
+
+  /* ══════════ IMAGE BOX · photo + quote crossfade ══════════ */
+  (function initImageBox() {
+    const img = document.getElementById("ib-img");
+    const quoteEl = document.getElementById("ib-quote");
+    const dotsWrap = document.getElementById("ib-dots");
+    if (!img || !quoteEl || !dotsWrap) return;
+
+    const slides = [
+      { src: "assets/pic1.jpg", caption: "Some moments are ordinary when they happen, but become priceless when we look back." },
+      { src: "assets/pic2.jpg", caption: "If memories were flowers, I'd fill an entire garden with ours." },
+      { src: "assets/pic3.jpg", caption: "Some people don't just enter our lives… they make our world a little more beautiful." },
+      { src: "assets/pic4.jpg", caption: "Every little moment with you became a memory I never want to forget." },
+      { src: "assets/pic5.jpg", caption: "You deserve a life filled with beautiful moments, gentle hearts, and endless reasons to be happy." },
+    ];
+    let idx = 0;
+
+    /* build dots */
+    slides.forEach((_, i) => {
+      const d = document.createElement("button");
+      d.className = "ib-dot" + (i === 0 ? " active" : "");
+      d.setAttribute("aria-label", "Slide " + (i + 1));
+      d.addEventListener("click", () => goTo(i));
+      dotsWrap.appendChild(d);
+    });
+    const dots = dotsWrap.querySelectorAll(".ib-dot");
+
+    function goTo(n) {
+      if (n === idx) return;
+      img.style.opacity = "0";
+      quoteEl.style.opacity = "0";
+      setTimeout(() => {
+        img.src = slides[n].src;
+        quoteEl.textContent = slides[n].caption;
+        dots[idx].classList.remove("active");
+        dots[n].classList.add("active");
+        idx = n;
+        img.style.opacity = "1";
+        quoteEl.style.opacity = "1";
+      }, 600);
+    }
+
+    /* auto-rotate every 5s */
+    setInterval(() => goTo((idx + 1) % slides.length), 5000);
+  })();
 });

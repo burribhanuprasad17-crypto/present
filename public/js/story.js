@@ -493,6 +493,10 @@
     tlNext.textContent = i === TL.length - 1 ? "Continue to the Letter ♥" : "Continue →";
     updateTimelineProgress();
 
+    // Show the UI panel
+    const tlUi = document.querySelector(".tl-ui");
+    if (tlUi) tlUi.classList.add("show");
+
     // Build scene environment
     buildTimelineEnvironment(st);
     // Show big line for final scene

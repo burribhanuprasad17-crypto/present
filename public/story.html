@@ -155,7 +155,10 @@
           <p class="note-ornament" aria-hidden="true">♥</p>
         </div>
       </div>
-      <button id="note-next" class="journey-btn">Next ♥</button>
+      <div class="journey-actions">
+        <button id="note-prev" class="journey-btn ghost" type="button">← Previous</button>
+        <button id="note-next" class="journey-btn">Next ♥</button>
+      </div>
       <p class="notes-progress" id="notes-progress"></p>
     </div>
   </div>
@@ -168,7 +171,10 @@
       <p class="tl-count" id="tl-count">01 / 09</p>
       <h2 class="tl-title" id="tl-title"></h2>
       <p class="tl-text" id="tl-text"></p>
-      <button id="tl-next" class="journey-btn">Continue →</button>
+      <div class="journey-actions">
+        <button id="tl-prev" class="journey-btn ghost" type="button">← Previous</button>
+        <button id="tl-next" class="journey-btn">Continue →</button>
+      </div>
     </div>
     <div class="tl-progress-track" id="tl-progress-track" aria-hidden="true"></div>
   </div>

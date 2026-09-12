@@ -158,6 +158,7 @@
   const noteText = document.getElementById("note-text");
   const notePhoto = document.getElementById("note-photo");
   const noteNext = document.getElementById("note-next");
+  const notePrev = document.getElementById("note-prev");
   const notesProgress = document.getElementById("notes-progress");
   const envelopeProgress = document.getElementById("envelope-progress");
   const tlScene = document.getElementById("tl-scene");
@@ -166,6 +167,7 @@
   const tlTitle = document.getElementById("tl-title");
   const tlText = document.getElementById("tl-text");
   const tlNext = document.getElementById("tl-next");
+  const tlPrev = document.getElementById("tl-prev");
   const tlProgressTrack = document.getElementById("tl-progress-track");
   const ltEnvelope = document.getElementById("lt-envelope");
   const ltLetter = document.getElementById("lt-letter");
@@ -428,6 +430,9 @@
 
     noteCard.classList.remove("show");
     noteNext.classList.remove("show");
+    if (notePrev) {
+      notePrev.disabled = i === 0;
+    }
     // Trigger envelope opening animation
     const envelope = document.getElementById("note-envelope");
     envelope.classList.remove("opened");
@@ -442,6 +447,15 @@
     const isLast = i === NOTES.length - 1;
     noteNext.textContent = isLast ? "Walk Through Our Story →" : "Next ♥";
     notesProgress.textContent = (i + 1) + " of 7 — one at a time, because each one deserves a moment.";
+  }
+
+  if (notePrev) {
+    notePrev.addEventListener("click", () => {
+      if (noteIdx > 0) {
+        noteIdx--;
+        showNote(noteIdx);
+      }
+    });
   }
 
   noteNext.addEventListener("click", () => {
@@ -491,6 +505,9 @@
     tlTitle.textContent = st.title;
     tlText.textContent = st.text;
     tlNext.textContent = i === TL.length - 1 ? "Continue to the Letter ♥" : "Continue →";
+    if (tlPrev) {
+      tlPrev.disabled = i === 0;
+    }
     updateTimelineProgress();
 
     // Show the UI panel
@@ -501,6 +518,15 @@
     buildTimelineEnvironment(st);
     // Show big line for final scene
     if (st.bigLine) setTimeout(() => showBigLine(st.bigLine), T(2000));
+  }
+
+  if (tlPrev) {
+    tlPrev.addEventListener("click", () => {
+      if (tlIndex > 0) {
+        tlIndex--;
+        renderTimelineScene(tlIndex);
+      }
+    });
   }
 
   function buildTimelineEnvironment(st) {

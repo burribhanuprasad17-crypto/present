@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css?v=10" />
 <link rel="stylesheet" href="css/story.css?v=5" />
+<link rel="stylesheet" href="css/enhance.css" />
 <style>
 /* Notes desk + timeline env */
 .notes-desk-scene{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -132,6 +133,7 @@
 
   <!-- ══════════ Stage · Things I Never Said ══════════ -->
   <div id="notes" class="journey-stage" hidden>
+    <button id="notes-back" class="page-back" type="button" style="position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));z-index:200;">← Home</button>
     <!-- Desk atmosphere -->
     <div class="notes-desk-scene" aria-hidden="true">
       <div class="desk-lamp"></div>
@@ -165,6 +167,7 @@
 
   <!-- ══════════ Stage · Walk Through Our Story (cinematic timeline) ══════════ -->
   <div id="timeline" class="journey-stage" hidden>
+    <button id="timeline-back" class="page-back" type="button" style="position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));z-index:200;">← Things I Never Said</button>
     <div class="tl-scene" id="tl-scene"></div>
     <div class="tl-atmosphere" id="tl-atmosphere" aria-hidden="true"></div>
     <div class="tl-ui">
@@ -181,6 +184,7 @@
 
   <!-- ══════════ Stage · The letter ══════════ -->
   <div id="letter-stage" class="journey-stage" hidden>
+    <button id="letter-back" class="page-back" type="button" style="position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));z-index:200;">← Our Journey</button>
     <div class="lt-inner">
       <button id="lt-envelope" class="lt-envelope" aria-label="Open the letter">
         <span class="lt-env-paper" aria-hidden="true"></span>
@@ -201,6 +205,7 @@
 
   <!-- ══════════ Stage · The 9-Chapter Storybook ══════════ -->
   <div id="book-stage" class="journey-stage" hidden>
+    <button id="book-back" class="page-back" type="button" style="position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));z-index:200;">← Letter</button>
 
     <!-- Chapter intro overlay -->
     <div id="chapter-intro" class="chapter-intro" aria-hidden="true">
@@ -319,5 +324,6 @@
   </div>
 
   <script src="js/story.js?v=5"></script>
+<script src="js/enhance.js"></script>
 </body>
 </html>

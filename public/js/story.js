@@ -466,9 +466,49 @@
       notesComplete = true;
       saveNotesComplete();
       hideStage(notesStage);
-      setTimeout(startTimeline, 500);
+      setTimeout(() => showJourneyTransition(), 500);
     }
   });
+
+  /* ══════════ JOURNEY TRANSITION (Notes → Our Journey) ══════════ */
+  function showJourneyTransition() {
+    // Create a cinematic transition overlay
+    const trans = document.createElement("div");
+    trans.className = "journey-stage visible";
+    trans.id = "journey-transition";
+    trans.style.cssText = "display:grid;place-items:center;overflow:hidden;";
+    trans.innerHTML = `
+      <button id="jt-back" class="page-back" type="button" style="position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));z-index:200;">← Things I Never Said</button>
+      <div class="notes-inner" style="max-width:600px;text-align:center;">
+        <p id="jt-line1" style="font-family:var(--font-serif);font-style:italic;font-size:clamp(18px,3.2vw,26px);color:var(--cream);opacity:0;transform:translateY(16px);transition:opacity 1.2s ease,transform 1.2s ease;line-height:1.7;">
+          Some things can only be understood<br>when you know how the story began&hellip;
+        </p>
+        <p id="jt-line2" style="font-family:var(--font-display);font-size:clamp(28px,5.5vw,48px);color:var(--cherry);margin-top:40px;opacity:0;transform:translateY(20px);transition:opacity 1.4s ease,transform 1.4s ease;text-shadow:0 0 30px rgba(246,182,200,.6);">
+          So let&rsquo;s go back.
+        </p>
+      </div>
+    `;
+    document.body.appendChild(trans);
+
+    // Animate in the lines
+    setTimeout(() => {
+      const line1 = document.getElementById("jt-line1");
+      if (line1) { line1.style.opacity = "1"; line1.style.transform = "translateY(0)"; }
+    }, 800);
+    setTimeout(() => {
+      const line2 = document.getElementById("jt-line2");
+      if (line2) { line2.style.opacity = "1"; line2.style.transform = "translateY(0)"; }
+    }, 3000);
+    // Then fade out and start timeline
+    setTimeout(() => {
+      trans.style.transition = "opacity 1.2s ease";
+      trans.style.opacity = "0";
+      setTimeout(() => {
+        trans.remove();
+        startTimeline();
+      }, 1200);
+    }, 5500);
+  }
 
   /* ══════════ WALK THROUGH OUR STORY (Timeline) ══════════ */
   let tlIndex = 0;
@@ -1117,6 +1157,74 @@
       h.animate([{ transform: "translate(-50%,-50%) scale(1)", opacity: 0.8 }, { transform: "translate(-50%,-50%) translateY(-34px) scale(0.4)", opacity: 0 }], { duration: 950, easing: "ease-out" }).onfinish = () => h.remove();
     }, { passive: true });
   }
+
+  /* ══════════ BACK BUTTONS ══════════ */
+  function wireBackButtons() {
+    // Notes back → go to Home
+    const notesBack = document.getElementById("notes-back");
+    if (notesBack) notesBack.addEventListener("click", () => { window.location.href = "home.html#home-top"; });
+
+    // Timeline back → go to Notes
+    const timelineBack = document.getElementById("timeline-back");
+    if (timelineBack) timelineBack.addEventListener("click", () => {
+      hideStage(timelineStage);
+      setTimeout(() => {
+        // Reset notes state so they can be viewed again
+        noteIdx = 0;
+        notesComplete = false;
+        startNotes();
+      }, 500);
+    });
+
+    // Add back button to journey transition
+    document.addEventListener("click", (e) => {
+      const backBtn = e.target.closest("#jt-back");
+      if (!backBtn) return;
+      const trans = document.getElementById("journey-transition");
+      if (trans) {
+        trans.style.transition = "opacity .6s ease";
+        trans.style.opacity = "0";
+        setTimeout(() => {
+          trans.remove();
+          noteIdx = 0;
+          notesComplete = false;
+          startNotes();
+        }, 600);
+      }
+    });
+
+    // Letter back → go to Timeline
+    const letterBack = document.getElementById("letter-back");
+    if (letterBack) letterBack.addEventListener("click", () => {
+      hideStage(letterStage);
+      setTimeout(() => {
+        // Reset timeline state
+        tlIndex = 0;
+        timelineComplete = false;
+        startTimeline();
+      }, 500);
+    });
+
+    // Book back → go to Letter
+    const bookBack = document.getElementById("book-back");
+    if (bookBack) bookBack.addEventListener("click", () => {
+      hideStage(bookStage);
+      setTimeout(() => {
+        // Reset letter state
+        ltEnvelope.classList.remove("opened");
+        ltEnvelope.style.display = "";
+        ltEnvelope.style.opacity = "";
+        ltEnvelope.style.transition = "";
+        ltLetter.hidden = true;
+        ltLetter.classList.remove("show");
+        ltNext.hidden = true;
+        ltNext.classList.remove("show");
+        startLetter();
+      }, 500);
+    });
+  }
+
+  wireBackButtons();
 
   /* ══════════ INIT ══════════ */
   buildDust();

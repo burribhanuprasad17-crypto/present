@@ -1250,12 +1250,8 @@ body.flash .scene { filter: brightness(1.6) saturate(1.15); transition: filter 1
   .xmas-tree:nth-child(3) { left: 65%; bottom: 0; }
   .xmas-tree:nth-child(4) { left: 90%; bottom: 0; }
   .gift-box {
-    position: fixed;
+    position: absolute;
     animation: none !important;
-  }
-  .gift-box {
-    left: auto !important;
-    top: auto !important;
   }
 }
 
